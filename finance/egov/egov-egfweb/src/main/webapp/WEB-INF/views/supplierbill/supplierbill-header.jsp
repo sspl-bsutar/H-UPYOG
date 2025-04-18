@@ -57,11 +57,11 @@
 	</div>
 	<div class="form-group">
 		<c:choose>
-			<c:when test="${!billNumberGenerationAuto}">
+			<c:when test="${billNumberGenerationAuto}">
 				<label class="col-sm-3 control-label text-right"><spring:message code="lbl.billnumber" text="Bill Number"/><span class="mandatory"></span>
 				</label>
 				<div class="col-sm-3 add-margin">
-					<form:input class="form-control patternvalidation" data-pattern="alphanumericwithspecialcharacters" id="billnumber" path="billnumber" maxlength="50" required="required" />
+					<form:input class="form-control patternvalidation" data-pattern="alphanumericwithspecialcharacters" id="billnumber" path="billnumber" maxlength="50" required="required" value="${billNumberGenerationAuto}" readonly="true"/>
 					<form:errors path="billnumber" cssClass="add-margin error-msg" />
 				</div>
 				
@@ -73,6 +73,12 @@
 				</div>
 			</c:when>
 			<c:otherwise>
+			<label class="col-sm-3 control-label text-right"><spring:message code="lbl.billnumber" text="Bill Number"/><span class="mandatory"></span>
+                </label>
+                <div class="col-sm-3 add-margin">
+                    <form:input class="form-control patternvalidation" data-pattern="alphanumericwithspecialcharacters" id="billnumber" path="billnumber" maxlength="50" required="required" value="${billNumberGenerationAuto}" readonly="true"/>
+                    <form:errors path="billnumber" cssClass="add-margin error-msg" />
+                </div>
 				<label class="col-sm-3 control-label text-right"><spring:message code="lbl.billdate" text="Bill Date"/><span class="mandatory"></span>
 				</label>
 				<div class="col-sm-3 add-margin">
@@ -104,7 +110,7 @@
 			<span class="mandatory"></span>
 		</label>
 		<div class="col-sm-3 add-margin">
-			<form:select path="workordernumber" data-first-option="false" id="purchaseOrder" class="form-control" required="required"  >
+			<form:select path="workordernumber" data-first-option="false" id="purchaseOrder" class="form-control" required="required" onchange="getPurchaseItemsByOrderId()" >
 				<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 				<form:options items="${purchaseOrders}" itemValue="name" itemLabel="orderNumber" />
 			</form:select>

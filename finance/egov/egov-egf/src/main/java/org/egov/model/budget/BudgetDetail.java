@@ -177,6 +177,9 @@ public class BudgetDetail extends StateAware {
     @SafeHtml
     private String comment;
     
+    @Column(name = "tenantid")
+    private String tenantId;
+    
     @Transient
     private static final Logger LOGGER = Logger.getLogger(BudgetDetail.class);
 
@@ -460,7 +463,15 @@ public class BudgetDetail extends StateAware {
         this.nextYroriginalAmount = nextYroriginalAmount;
     }
 
-    public BigDecimal getNextYrapprovedAmount() {
+    public String getTenantId() {
+		return tenantId;
+	}
+
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
+	}
+
+	public BigDecimal getNextYrapprovedAmount() {
         return nextYrapprovedAmount;
     }
 

@@ -46,107 +46,154 @@
   ~
   --%>
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <style>
-    .position_alert {
-        position: fixed;
-        z-index: 9999;
-        top: 50px;
-        right: 20px;
-        background: #F2DEDE;
-        padding: 10px 20px;
-        border-radius: 5px;
-    }
-
-    .position_alert1 {
-        position: fixed;
-        z-index: 9999;
-        top: 50px;
-        right: 520px;
-        background: #F2DEDE;
-        padding: 10px 20px;
-        border-radius: 5px;
-    }
-
-    .position_alert2 {
-        position: fixed;
-        z-index: 9999;
-        top: 50px;
-        right: 270px;
-        background: #F2DEDE;
-        padding: 10px 20px;
-        border-radius: 5px;
-    }
+.position_alert1 {
+	position: fixed;
+	z-index: 9999;
+	top: 5px;
+	right: 780px;
+	background: #F2DEDE;
+	padding: 5px 10px;
+	border-radius: 5px;
+}
+.position_alert2 {
+	position: fixed;
+	z-index: 9999;
+	top: 5px;
+	right: 500px;
+	background: #F2DEDE;
+	padding: 5px 10px;
+	border-radius: 5px;
+}
+.position_alert3 {
+	position: fixed;
+	z-index: 9999;
+	top: 5px;
+	right: 270px;
+	background: #F2DEDE;
+	padding: 5px 10px;
+	border-radius: 5px;
+}
+.position_alert4 {
+	position: fixed;
+	z-index: 9999;
+	top: 5px;
+	right: 20px;
+	background: #F2DEDE;
+	padding: 5px 10px;
+	border-radius: 5px;
+}
 </style>
-    <form:form name="supplierBillForm" role="form" method="post" action="create" modelAttribute="egBillregister" id="egBillregister" class="form-horizontal form-groups-bordered" enctype="multipart/form-data">
+<form:form name="supplierBillForm" role="form" method="post"
+	action="create" modelAttribute="egBillregister" id="egBillregister"
+	class="form-horizontal form-groups-bordered"
+	enctype="multipart/form-data">
 
-<c:if test="${not empty errorMessage}">
-	<div class="alert alert-danger" role="alert">
-		<c:out value="${errorMessage}" />
+	<c:if test="${not empty errorMessage}">
+		<div class="alert alert-danger" role="alert">
+			<c:out value="${errorMessage}" />
+		</div>
+	</c:if>
+
+	<div class="position_alert1">
+		<spring:message code="lbl.total.debit.amount"
+			text="Total Debit Amount" />
+		: &#8377 <span id="supplierBillTotalDebitAmount"> <c:out
+				value="${supplierBillTotalDebitAmount}" default="0.0"></c:out></span>
 	</div>
-</c:if>
+	<div class="position_alert2">
+		<spring:message code="lbl.total.deduction.amount"
+			text="Total Deduction Amount" />
+		: &#8377 <span id="supplierBillTotalCreditAmount"> <c:out
+				value="${supplierBillTotalCreditAmount}" default="0.0"></c:out></span>
+	</div>
+	<div class="position_alert3">
+		<spring:message code="lbl.netpayable.amount" text="Net Payable Amount" />
+		: &#8377 <span id="supplierNetPayableAmount"><c:out
+				value="${supplierNetPayableAmount}" default="0.0"></c:out></span>
+	</div>
 	
-    <div class="position_alert">
-        <spring:message code="lbl.netpayable.amount" text="Net Payable Amount"/>
-        : &#8377 <span id="supplierNetPayableAmount"><c:out
-            value="${supplierNetPayableAmount}" default="0.0"></c:out></span>
-    </div>
-    <div class="position_alert1">
-        <spring:message code="lbl.total.debit.amount" text="Total Debit Amount"/>
-        : &#8377 <span id="supplierBillTotalDebitAmount"> <c:out
-            value="${supplierBillTotalDebitAmount}" default="0.0"></c:out></span>
-    </div>
-    <div class="position_alert2">
-        <spring:message code="lbl.total.deduction.amount" text="Total Deduction Amount"/>
-        : &#8377 <span id="supplierBillTotalCreditAmount"> <c:out
-            value="${supplierBillTotalCreditAmount}" default="0.0"></c:out></span>
-    </div>
+	
+	<div class="position_alert4">
+		<spring:message code="lbl.toal.budget.amount" text="Total Budget Amount" />
+		: &#8377 <span id="budgetAmount"><c:out
+				value="${totalBudgetAmount}" default="0.0"></c:out></span>
+	</div>
 
-    <form:hidden path="" id="cutOffDate" value="${cutOffDate}"/>
-    <form:hidden path="" name="mode" id="mode" value="${mode}"/>
-    <form:hidden path="" name="netPayableId" id="netPayableId" value="${netPayableId}"/>
-    <form:hidden path="" name="netPayableAmount" id="netPayableAmount" value="${netPayableAmount}"/>
-    <form:hidden path="passedamount" name="passedamount" id="passedamount" value="${egBillregister.passedamount}"/>
+	<form:hidden path="" id="cutOffDate" value="${cutOffDate}" />
+	<form:hidden path="" name="mode" id="mode" value="${mode}" />
+	<form:hidden path="" name="netPayableId" id="netPayableId"
+		value="${netPayableId}" />
+	<form:hidden path="" name="netPayableAmount" id="netPayableAmount"
+		value="${netPayableAmount}" />
+	<form:hidden path="passedamount" name="passedamount" id="passedamount"
+		value="${egBillregister.passedamount}" />
+		
+		<form:hidden class="form-control patternvalidation" path="" name=""
 
-    <div class="panel-title text-center" style="color: green;">
-        <c:out value="${message}"/>
-        <br/>
-    </div>
-    <spring:hasBindErrors name="egBillregister">
-        <div class="alert alert-danger" style="margin-top: 20px; margin-bottom: 10px;">
-            <form:errors path="*"/>
-            <br/>
-        </div>
-    </spring:hasBindErrors>
+		id="itemList" value="${data.itemCode}}" />
 
-     <div class="tab-pane fade in active" id="supplierbillheader">
-         <jsp:include page="supplierbill-header.jsp"/>
-           <div class="panel panel-primary" data-collapsed="0">
-           <jsp:include page="supplier-accountcodetemplate.jsp"/>    
-             <jsp:include page="supplierbill-debitdetails.jsp"/>
-             <jsp:include page="supplierbill-creditdetails.jsp"/>
-             <jsp:include page="supplierbill-netpayable.jsp"/>
-         </div>
-         <jsp:include page="billdocument-upload.jsp"/>
-     </div>
-     <jsp:include page="../common/commonworkflowmatrix-expensebill.jsp"/>
-     <div class="buttonbottom" align="center">
-         <jsp:include page="../common/commonworkflowmatrix-button.jsp"/>
-     </div>
+	<form:hidden class="form-control patternvalidation" path=""
+
+		id="itemList1" value="${data.unitrte}" />
+
+	<form:hidden class="form-control patternvalidation" path=""
+
+		id="itemList2" value="${data.quantity}" />
+
+	<form:hidden class="form-control patternvalidation" path=""
+
+		id="itemList3" value="${data.amount}" />
+
+	<form:hidden class="form-control patternvalidation"
+
+		path="purchaseObject" id="purchaseObject" name="purchaseObject"
+
+		value="${purchaseObject}" />
+
+	<div class="panel-title text-center" style="color: green;">
+		<c:out value="${message}" />
+		<br />
+	</div>
+	<spring:hasBindErrors name="egBillregister">
+		<div class="alert alert-danger"
+			style="margin-top: 20px; margin-bottom: 10px;">
+			<form:errors path="*" />
+			<br />
+		</div>
+	</spring:hasBindErrors>
+
+	<div class="tab-pane fade in active" id="supplierbillheader">
+		<jsp:include page="supplierbill-header.jsp" />
+		<div class="panel panel-primary" data-collapsed="0">
+			<jsp:include page="supplierbill-purchaseitems.jsp" />
+			<jsp:include page="supplier-accountcodetemplate.jsp" />
+			<jsp:include page="supplierbill-debitdetails.jsp" />
+			<jsp:include page="supplierbill-creditdetails.jsp" />
+			<jsp:include page="supplierbill-netpayable.jsp" />
+		</div>
+		<jsp:include page="billdocument-upload.jsp" />
+	</div>
+	<jsp:include page="../common/commonworkflowmatrix-expensebill.jsp" />
+	<div class="buttonbottom" align="center">
+		<jsp:include page="../common/commonworkflowmatrix-button.jsp" />
+	</div>
 
 </form:form>
-<script src="<cdn:url value='/resources/app/js/i18n/jquery.i18n.properties.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
 <script
-        src="<cdn:url value='/resources/app/js/common/helper.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
+	src="<cdn:url value='/resources/app/js/i18n/jquery.i18n.properties.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
 <script
-        src="<cdn:url value='/resources/app/js/supplierbill/supplierbill.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
+	src="<cdn:url value='/resources/app/js/common/helper.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
 <script
-        src="<cdn:url value='/resources/app/js/common/voucherBillHelper.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
+	src="<cdn:url value='/resources/app/js/supplierbill/supplierbill.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
 <script
-        src="<cdn:url value='/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
+	src="<cdn:url value='/resources/app/js/common/voucherBillHelper.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
 <script
-        src="<cdn:url value='/resources/global/js/egov/inbox.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
+	src="<cdn:url value='/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
+<script
+	src="<cdn:url value='/resources/global/js/egov/inbox.js?rnd=${app_release_no}' context='/services/egi'/>"></script>

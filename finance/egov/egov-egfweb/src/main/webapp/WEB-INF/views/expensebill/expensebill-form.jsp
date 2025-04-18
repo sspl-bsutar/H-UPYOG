@@ -52,53 +52,66 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <style>
-    .position_alert {
-        position: fixed;
-        z-index: 9999;
-        top: 85px;
-        right: 20px;
-        background: #F2DEDE;
-        padding: 10px 20px;
-        border-radius: 5px;
-    }
-
-    .position_alert1 {
-        position: fixed;
-        z-index: 9999;
-        top: 85px;
-        right: 520px;
-        background: #F2DEDE;
-        padding: 10px 20px;
-        border-radius: 5px;
-    }
-
-    .position_alert2 {
-        position: fixed;
-        z-index: 9999;
-        top: 85px;
-        right: 270px;
-        background: #F2DEDE;
-        padding: 10px 20px;
-        border-radius: 5px;
-    }
+   .position_alert1 {
+	position: fixed;
+	z-index: 9999;
+	top: 5px;
+	right: 780px;
+	background: #F2DEDE;
+	padding: 5px 10px;
+	border-radius: 5px;
+}
+.position_alert2 {
+	position: fixed;
+	z-index: 9999;
+	top: 5px;
+	right: 500px;
+	background: #F2DEDE;
+	padding: 5px 10px;
+	border-radius: 5px;
+}
+.position_alert3 {
+	position: fixed;
+	z-index: 9999;
+	top: 5px;
+	right: 270px;
+	background: #F2DEDE;
+	padding: 5px 10px;
+	border-radius: 5px;
+}
+.position_alert4 {
+	position: fixed;
+	z-index: 9999;
+	top: 5px;
+	right: 20px;
+	background: #F2DEDE;
+	padding: 5px 10px;
+	border-radius: 5px;
+}
 </style>
     <form:form name="expenseBillForm" role="form" method="post" action="create" modelAttribute="egBillregister" id="egBillregister" class="form-horizontal form-groups-bordered" enctype="multipart/form-data">
 	
-    <div class="position_alert">
+    <div class="position_alert1">
         <spring:message code="lbl.netpayable.amount" text="Net Payable Amount"/>
         : &#8377 <span id="expenseNetPayableAmount"><c:out
             value="${expenseNetPayableAmount}" default="0.0"></c:out></span>
     </div>
-    <div class="position_alert1">
+    <div class="position_alert2">
         <spring:message code="lbl.total.debit.amount" text="Total Debit Amount"/>
         : &#8377 <span id="expenseBillTotalDebitAmount"> <c:out
             value="${expenseBillTotalDebitAmount}" default="0.0"></c:out></span>
     </div>
-    <div class="position_alert2">
+    <div class="position_alert3">
         <spring:message code="lbl.total.credit.amount" text="Total Credit Amount"/>
         : &#8377 <span id="expenseBillTotalCreditAmount"> <c:out
             value="${expenseBillTotalCreditAmount}" default="0.0"></c:out></span>
     </div>
+    
+    <div class="position_alert4">
+		<spring:message code="lbl.toal.budget.amount" text="Total Budget Amount" />
+		: &#8377 <span id="budgetAmount"><c:out
+				value="${totalBudgetAmount}" default="0.0"></c:out></span>
+	</div>
 
     <form:hidden path="" id="cutOffDate" value="${cutOffDate}"/>
     <form:hidden path="" name="mode" id="mode" value="${mode}"/>

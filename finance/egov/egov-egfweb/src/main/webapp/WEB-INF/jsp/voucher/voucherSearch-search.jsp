@@ -49,12 +49,13 @@
 
 <%@ page language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
-<link href="<egov:url path='/resources/css/displaytagFormatted.css?rnd=${app_release_no}'/>"
+<link
+	href="<egov:url path='/resources/css/displaytagFormatted.css?rnd=${app_release_no}'/>"
 	rel="stylesheet" type="text/css" />
 
 <html>
 <head>
-<title><s:text name="lbl.voucher.search"/></title>
+<title><s:text name="lbl.voucher.search" /></title>
 <base target="_self" />
 <script type="text/javascript">
 	function disableTypeForEditMode()
@@ -85,54 +86,56 @@
 		</span>
 		<div class="formmainbox">
 			<s:if test="%{showMode=='nonbillPayment'}">
-				<div class="subheadnew"><s:text name="msg.no.bill.payment.search"/> </div>
+				<div class="subheadnew">
+					<s:text name="msg.no.bill.payment.search" />
+				</div>
 			</s:if>
 			<s:else>
-				<div class="subheadnew"><s:text name="lbl.voucher.search"/> </div>
+				<div class="subheadnew">
+					<s:text name="lbl.voucher.search" />
+				</div>
 			</s:else>
 			<table align="center" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
 					<td style="width: 5%"></td>
 					<td class="greybox"><s:text name="voucher.number" /></td>
 					<td class="greybox"><s:textfield name="voucherNumber"
-							id="voucherNumber" maxlength="25" value="%{voucherNumber}"  onblur="changeField();" /></td>
+							id="voucherNumber" maxlength="25" value="%{voucherNumber}"
+							onblur="changeField();" /></td>
 					<td class="greybox"></td>
 					<td class="greybox"></td>
 				</tr>
 				<tr>
 					<td style="width: 5%"></td>
-					<td class="bluebox"><s:text name="voucher.type" /></td>
+					<td class="bluebox"><s:text name="voucher.type" /><span
+						class="mandatory1" id="disableFromDateCheck">*</span></td>
 					<td class="bluebox"><s:select name="type" id="type"
 							list="dropdownData.typeList" headerKey="-1"
 							headerValue="%{getText('lbl.choose.options')}"
 							onchange="loadVoucherNames(this.value)" /></td>
 					<td class="bluebox"><s:text name="voucher.name" /></td>
 					<td class="bluebox"><s:select name="name" id="name"
-							list="%{nameList}" headerKey="-1" headerValue="%{getText('lbl.choose.options')}" /></td>
+							list="%{nameList}" headerKey="-1"
+							headerValue="%{getText('lbl.choose.options')}" /></td>
 				</tr>
 				<tr>
 					<td style="width: 5%"></td>
 					<td class="greybox"><s:text name="voucher.fromdate" /><span
 						class="mandatory1" id="disableFromDateCheck">*</span></td>
 					<s:date name="fromDate" format="dd/MM/yyyy" var="tempFromDate" />
-					<td class="greybox">
-							<s:textfield id="fromDate" name="fromDate"
-							value="%{tempFromDate}"  data-date-end-date="0d" 
+					<td class="greybox"><s:textfield id="fromDate" name="fromDate"
+							value="%{tempFromDate}" data-date-end-date="0d"
 							onkeyup="DateFormat(this,this.value,event,false,'3')"
 							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
-							data-inputmask="'mask': 'd/m/y'" autocomplete="off"/>
-							</td>
+							data-inputmask="'mask': 'd/m/y'" autocomplete="off" /></td>
 					<s:date name="toDate" format="dd/MM/yyyy" var="tempToDate" />
 					<td class="greybox"><s:text name="voucher.todate" /><span
 						class="mandatory1" id="disableToDateCheck">*</span></td>
-					<td class="greybox">
-							<s:textfield id="toDate" name="toDate"
-							value="%{tempToDate}"  data-date-end-date="0d" 
+					<td class="greybox"><s:textfield id="toDate" name="toDate"
+							value="%{tempToDate}" data-date-end-date="0d"
 							onkeyup="DateFormat(this,this.value,event,false,'3')"
 							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
-							data-inputmask="'mask': 'd/m/y'" autocomplete="off"/>
-							
-							</td>
+							data-inputmask="'mask': 'd/m/y'" autocomplete="off" /></td>
 				</tr>
 				<tr>
 					<jsp:include page="../voucher/voucher-filter.jsp" />
@@ -147,26 +150,33 @@
 			</table>
 			<br />
 			<div class="subheadsmallnew"></div>
-			<div align="left" class="mandatory1"><s:text name="msg.either.voucher.number.or.mendatory.field.required"/> </div>
+			<div align="left" class="mandatory1">
+				<s:text name="msg.either.voucher.number.or.mendatory.field.required" />
+			</div>
 		</div>
-	
+
 		<div align="center" class="buttonbottom">
 			<s:submit key="lbl.search" onclick="return validateAndSubmit()"
 				cssClass="buttonsubmit" />
 			<input type="button" value='<s:text name="lbl.close"/>'
-				onclick="javascript:window.parent.postMessage('close','*');" class="button" />
+				onclick="javascript:window.parent.postMessage('close','*');"
+				class="button" />
 		</div>
 		<br />
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
 			<s:if test="%{pagedResults!=null}">
 				<tr>
-					<td width="100%"><display:table name="pagedResults"	uid="currentRowObject" cellpadding="0" cellspacing="0"
-							requestURI="" class="its" style=" border-left: 1px solid #C5C5C5; border-top: 1px solid #C5C5C5;border-right: 1px solid #C5C5C5;border-bottom: 1px solid #C5C5C5;">
+					<td width="100%"><display:table name="pagedResults"
+							uid="currentRowObject" cellpadding="0" cellspacing="0"
+							requestURI="" class="its"
+							style=" border-left: 1px solid #C5C5C5; border-top: 1px solid #C5C5C5;border-right: 1px solid #C5C5C5;border-bottom: 1px solid #C5C5C5;">
 							<display:column title=" Sl No" style="text-align:center;">
-								<s:property	value="%{#attr.currentRowObject_rowNum+ (page-1)*pageSize}" />
+								<s:property
+									value="%{#attr.currentRowObject_rowNum+ (page-1)*pageSize}" />
 							</display:column>
 							<display:column title="Voucher Number" style="text-align:center;">
-								<a href="#"	onclick="openVoucher('<s:property value='%{#attr.currentRowObject.id}'/>','<s:property value="%{#attr.currentRowObject.vouchernumber}" />','<s:date name="%{#attr.currentRowObject.voucherdate}" format="dd/MM/yyyy"/>');"><s:property
+								<a href="#"
+									onclick="openVoucher('<s:property value='%{#attr.currentRowObject.id}'/>','<s:property value="%{#attr.currentRowObject.vouchernumber}" />','<s:date name="%{#attr.currentRowObject.voucherdate}" format="dd/MM/yyyy"/>');"><s:property
 										value="%{#attr.currentRowObject.vouchernumber}" />
 							</display:column>
 
@@ -206,15 +216,15 @@
 					<table width="100%" border="0" align="center" cellpadding="0"
 						cellspacing="0" class="tablebottom">
 						<tr>
-							<th class="bluebgheadtd"><s:text name="lbl.sr.no"/></th>
-							<th class="bluebgheadtd"><s:text name="lbl.voucher.number"/></th>
-							<th class="bluebgheadtd"><s:text name="lbl.type"/>Type</th>
-							<th class="bluebgheadtd"><s:text name="lbl.name"/></th>
-							<th class="bluebgheadtd"><s:text name="lbl.voucher.date"/></th>
-							<th class="bluebgheadtd"><s:text name="lbl.fund.name"/></th>
-							<th class="bluebgheadtd"><s:text name="lbl.department.name"/></th>
-							<th class="bluebgheadtd"><s:text name="lbl.amount"/></th>
-							<th class="bluebgheadtd"><s:text name="lbl.status"/></th>
+							<th class="bluebgheadtd"><s:text name="lbl.sr.no" /></th>
+							<th class="bluebgheadtd"><s:text name="lbl.voucher.number" /></th>
+							<th class="bluebgheadtd"><s:text name="lbl.type" />Type</th>
+							<th class="bluebgheadtd"><s:text name="lbl.name" /></th>
+							<th class="bluebgheadtd"><s:text name="lbl.voucher.date" /></th>
+							<th class="bluebgheadtd"><s:text name="lbl.fund.name" /></th>
+							<th class="bluebgheadtd"><s:text name="lbl.department.name" /></th>
+							<th class="bluebgheadtd"><s:text name="lbl.amount" /></th>
+							<th class="bluebgheadtd"><s:text name="lbl.status" /></th>
 							<!-- <th class="bluebgheadtd">Source</th> -->
 						</tr>
 						<c:set var="trclass" value="greybox" />
@@ -355,6 +365,7 @@
 		
 		function validate()
 		{
+			var type=document.getElementById('type').value;
 			var fromDate=document.getElementById('fromDate').value;
 			var toDate=document.getElementById('toDate').value;
 			var fundId=document.getElementById('fundId').value;
@@ -362,6 +373,10 @@
 			console.log('fromDate : ',fromDate);
 			if(!DateValidation(fromDate,toDate))
 				return false;
+			if(type == "-1" && voucherNumber==""){
+				bootbox.alert("<s:text name='msg.please.select.type'/>");
+				return false;
+				}
 			if(fromDate == "" && voucherNumber!=""){
 				bootbox.alert("<s:text name='msg.please.select.from.date'/>");
 				return false;

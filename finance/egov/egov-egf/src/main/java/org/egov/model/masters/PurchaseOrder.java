@@ -48,8 +48,11 @@
 package org.egov.model.masters;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -57,6 +60,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -70,6 +74,7 @@ import org.egov.commons.utils.EntityType;
 import org.egov.infra.persistence.entity.AbstractAuditable;
 import org.egov.infra.persistence.validator.annotation.OptionalPattern;
 import org.egov.infra.persistence.validator.annotation.Unique;
+import org.egov.model.bills.EgBillPurchaseItemsDetails;
 import org.egov.utils.FinancialConstants;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.SafeHtml;
@@ -80,255 +85,269 @@ import org.hibernate.validator.constraints.SafeHtml;
 @SequenceGenerator(name = PurchaseOrder.SEQ_EGF_PURCHASEORDER, sequenceName = PurchaseOrder.SEQ_EGF_PURCHASEORDER, allocationSize = 1)
 public class PurchaseOrder extends AbstractAuditable implements EntityType {
 
-    private static final long serialVersionUID = 2642863347862704111L;
+	private static final long serialVersionUID = 2642863347862704111L;
 
-    public static final String SEQ_EGF_PURCHASEORDER = "SEQ_EGF_PURCHASEORDER";
+	public static final String SEQ_EGF_PURCHASEORDER = "SEQ_EGF_PURCHASEORDER";
 
-    @Id
-    @GeneratedValue(generator = SEQ_EGF_PURCHASEORDER, strategy = GenerationType.SEQUENCE)
-    private Long id;
+	@Id
+	@GeneratedValue(generator = SEQ_EGF_PURCHASEORDER, strategy = GenerationType.SEQUENCE)
+	private Long id;
 
-    @SafeHtml
-    @Length(max = 100, message = "Maximum of 100 Characters allowed for Order Number")
-    @OptionalPattern(regex = FinancialConstants.alphaNumericwithspecialcharForContraWOAndSupplierName, message = "Special Characters are not allowed in Order Number")
-    @Column(updatable = false)
-    private String orderNumber;
+	@SafeHtml
+	@Length(max = 100, message = "Maximum of 100 Characters allowed for Order Number")
+	@OptionalPattern(regex = FinancialConstants.alphaNumericwithspecialcharForContraWOAndSupplierName, message = "Special Characters are not allowed in Order Number")
+	@Column(updatable = false)
+	private String orderNumber;
 
-    @SafeHtml
-    @Length(max = 100, message = "Maximum of 100 Characters allowed for Name")
-    @OptionalPattern(regex = FinancialConstants.alphaNumericwithspecialcharForContraWOAndSupplierName, message = "Special Characters are not allowed in Name")
-    private String name;
+	@SafeHtml
+	@Length(max = 100, message = "Maximum of 100 Characters allowed for Name")
+	@OptionalPattern(regex = FinancialConstants.alphaNumericwithspecialcharForContraWOAndSupplierName, message = "Special Characters are not allowed in Name")
+	private String name;
 
-    private Date orderDate;
+	private Date orderDate;
 
-    @ManyToOne
-    @JoinColumn(name = "supplier")
-    private Supplier supplier;
+	@ManyToOne
+	@JoinColumn(name = "supplier")
+	private Supplier supplier;
 
-    @Min(1)
-    private BigDecimal orderValue;
+	@Min(1)
+	private BigDecimal orderValue;
 
-    @Min(1)
-    private BigDecimal advancePayable;
+	@Min(1)
+	private BigDecimal advancePayable;
 
-    @SafeHtml
-    private String description;
+	@SafeHtml
+	private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "fund")
-    private Fund fund;
+	@ManyToOne
+	@JoinColumn(name = "fund")
+	private Fund fund;
 
-    @SafeHtml
-    private String department;
+	@SafeHtml
+	private String department;
 
-    @ManyToOne
-    @JoinColumn(name = "scheme")
-    private Scheme scheme;
+	@ManyToOne
+	@JoinColumn(name = "scheme")
+	private Scheme scheme;
 
-    @ManyToOne
-    @JoinColumn(name = "subScheme")
-    private SubScheme subScheme;
+	@ManyToOne
+	@JoinColumn(name = "subScheme")
+	private SubScheme subScheme;
 
-    @SafeHtml
-    private String sanctionNumber;
+	@SafeHtml
+	private String sanctionNumber;
 
-    private Date sanctionDate;
+	private Date sanctionDate;
 
-    private Boolean active;
+	private Boolean active;
 
-    @Transient
-    private String departmentName;
+	@Transient
+	private String departmentName;
 
-    @Transient
-    private Boolean editAllFields;
+	@Transient
+	private Boolean editAllFields;
 
-    @Override
-    public String getBankname() {
-        return null;
-    }
+	@OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<PurchaseItems> purchaseItems = new ArrayList<>();
 
-    @Override
-    public String getBankaccount() {
-        return null;
-    }
+	@OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<EgBillPurchaseItemsDetails> egBillPurchaseItemsDetails;
 
-    @Override
-    public String getPanno() {
-        return null;
-    }
+	public List<PurchaseItems> getPurchaseItems() {
+		return purchaseItems;
+	}
 
-    @Override
-    public String getTinno() {
-        return null;
-    }
+	public void setPurchaseItems(List<PurchaseItems> purchaseItems) {
+		this.purchaseItems = purchaseItems;
+	}
 
-    @Override
-    public String getIfsccode() {
-        return null;
-    }
+	@Override
+	public String getBankname() {
+		return null;
+	}
 
-    @Override
-    public String getName() {
-        return name;
-    }
+	@Override
+	public String getBankaccount() {
+		return null;
+	}
 
-    @Override
-    public String getModeofpay() {
-        return null;
-    }
+	@Override
+	public String getPanno() {
+		return null;
+	}
 
-    @Override
-    public String getCode() {
-        return orderNumber;
-    }
+	@Override
+	public String getTinno() {
+		return null;
+	}
 
-    @Override
-    public Integer getEntityId() {
-        return null;
-    }
+	@Override
+	public String getIfsccode() {
+		return null;
+	}
 
-    @Override
-    public String getEntityDescription() {
-        return null;
-    }
+	@Override
+	public String getName() {
+		return name;
+	}
 
-    @Override
-    public EgwStatus getEgwStatus() {
-        return null;
-    }
+	@Override
+	public String getModeofpay() {
+		return null;
+	}
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	@Override
+	public String getCode() {
+		return orderNumber;
+	}
 
-    @Override
-    protected void setId(Long id) {
-    	this.id = id;
-    }
+	@Override
+	public Integer getEntityId() {
+		return null;
+	}
 
-    public String getOrderNumber() {
-        return orderNumber;
-    }
+	@Override
+	public String getEntityDescription() {
+		return null;
+	}
 
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
+	@Override
+	public EgwStatus getEgwStatus() {
+		return null;
+	}
 
-    public Date getOrderDate() {
-        return orderDate;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
-    }
+	@Override
+	protected void setId(Long id) {
+		this.id = id;
+	}
 
-    public Supplier getSupplier() {
-        return supplier;
-    }
+	public String getOrderNumber() {
+		return orderNumber;
+	}
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
 
-    public BigDecimal getOrderValue() {
-        return orderValue;
-    }
+	public Date getOrderDate() {
+		return orderDate;
+	}
 
-    public void setOrderValue(BigDecimal orderValue) {
-        this.orderValue = orderValue;
-    }
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
 
-    public BigDecimal getAdvancePayable() {
-        return advancePayable;
-    }
+	public Supplier getSupplier() {
+		return supplier;
+	}
 
-    public void setAdvancePayable(BigDecimal advancePayable) {
-        this.advancePayable = advancePayable;
-    }
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public BigDecimal getOrderValue() {
+		return orderValue;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setOrderValue(BigDecimal orderValue) {
+		this.orderValue = orderValue;
+	}
 
-    public Fund getFund() {
-        return fund;
-    }
+	public BigDecimal getAdvancePayable() {
+		return advancePayable;
+	}
 
-    public void setFund(Fund fund) {
-        this.fund = fund;
-    }
+	public void setAdvancePayable(BigDecimal advancePayable) {
+		this.advancePayable = advancePayable;
+	}
 
-    public String getDepartment() {
-        return department;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDepartment(String department) {
-        this.department = department;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public Scheme getScheme() {
-        return scheme;
-    }
+	public Fund getFund() {
+		return fund;
+	}
 
-    public void setScheme(Scheme scheme) {
-        this.scheme = scheme;
-    }
+	public void setFund(Fund fund) {
+		this.fund = fund;
+	}
 
-    public SubScheme getSubScheme() {
-        return subScheme;
-    }
+	public String getDepartment() {
+		return department;
+	}
 
-    public void setSubScheme(SubScheme subScheme) {
-        this.subScheme = subScheme;
-    }
+	public void setDepartment(String department) {
+		this.department = department;
+	}
 
-    public String getSanctionNumber() {
-        return sanctionNumber;
-    }
+	public Scheme getScheme() {
+		return scheme;
+	}
 
-    public void setSanctionNumber(String sanctionNumber) {
-        this.sanctionNumber = sanctionNumber;
-    }
+	public void setScheme(Scheme scheme) {
+		this.scheme = scheme;
+	}
 
-    public Date getSanctionDate() {
-        return sanctionDate;
-    }
+	public SubScheme getSubScheme() {
+		return subScheme;
+	}
 
-    public void setSanctionDate(Date sanctionDate) {
-        this.sanctionDate = sanctionDate;
-    }
+	public void setSubScheme(SubScheme subScheme) {
+		this.subScheme = subScheme;
+	}
 
-    public Boolean getActive() {
-        return active;
-    }
+	public String getSanctionNumber() {
+		return sanctionNumber;
+	}
 
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
+	public void setSanctionNumber(String sanctionNumber) {
+		this.sanctionNumber = sanctionNumber;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public Date getSanctionDate() {
+		return sanctionDate;
+	}
 
-    public String getDepartmentName() {
-        return departmentName;
-    }
+	public void setSanctionDate(Date sanctionDate) {
+		this.sanctionDate = sanctionDate;
+	}
 
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
-    }
+	public Boolean getActive() {
+		return active;
+	}
 
-    public Boolean getEditAllFields() {
-        return editAllFields;
-    }
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
 
-    public void setEditAllFields(Boolean editAllFields) {
-        this.editAllFields = editAllFields;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
+	public Boolean getEditAllFields() {
+		return editAllFields;
+	}
+
+	public void setEditAllFields(Boolean editAllFields) {
+		this.editAllFields = editAllFields;
+	}
 
 }

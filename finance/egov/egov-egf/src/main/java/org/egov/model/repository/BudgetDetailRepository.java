@@ -74,5 +74,8 @@ public interface BudgetDetailRepository extends JpaRepository<BudgetDetail, java
 
     @Query("from BudgetDetail where uniqueNo=:uniqueNo and budget in (select id from Budget where referenceBudget.id=:budgetId)")
     BudgetDetail findByReferenceBudget(@Param("uniqueNo") String uniqueNo, @Param("budgetId") Long budgetId);
+    
+    @Query("Select sum(budgetAvailable) from BudgetDetail where executingDepartment=:dept")
+    BigDecimal getAllBudgetAmountByDepartment(@Param("dept")String dept);
 
 }

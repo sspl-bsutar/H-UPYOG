@@ -51,6 +51,7 @@
 package org.egov.egf.web.actions.voucher;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -68,6 +69,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -135,6 +137,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 //import com.exilant.eGov.src.domain.Bank;
 
 @Results({
@@ -172,12 +176,12 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
         @Result(name = "desg", location = "common-desg.jsp"),
         @Result(name = "COA", location = "common-COA.jsp"),
         @Result(name = "process", location = "common-process.jsp"),
-        @Result(name = "schemeBy20", location = "common-schemeBy20.jsp"),
+        @Result(name = "schemeBy20", type = "stream", params = {"contentType", "text/html"}),
+       // @Result(name = "schemeBy20", location = "common-schemeBy20.jsp"),
         @Result(name = "yearCode", location = "common-yearCode.jsp"),
         @Result(name = "estimateBudgetDetails", location = "common-estimateBudgetDetails.jsp")
 })
 public class CommonAction extends BaseFormAction {
-
     private static final Logger LOGGER = Logger.getLogger(CommonAction.class);
     private static final long serialVersionUID = 1L;
     private static final String RTGSNUMBERSQUERY = "SELECT ih.id, ih.transactionNumber FROM InstrumentHeader ih, InstrumentVoucher iv, "
@@ -338,30 +342,7 @@ public class CommonAction extends BaseFormAction {
             LOGGER.debug("Completed ajaxLoadSchemes.");
         return "schemes";
     }
-
-    @SuppressWarnings("unchecked")
-    @Action(value = "/voucher/common-ajaxLoadSchemeBy20")
-    public String ajaxLoadSchemeBy20() {
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Starting ajaxLoadSchemeBy20...");
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Fund Id received is :  " + fundId + "   and Startswith   :" + startsWith);
-        startsWith = "%" + startsWith + "%";
-        schemeList = new ArrayList<Scheme>();
-        final String qry = "from Scheme  where upper(code) like upper(?) or upper(name) like upper(?) and isactive=true ";
-        if (null != fundId && fundId != -1)
-            schemeList.addAll(getPersistenceService().findPageBy(qry + " and fund.id=(?) order by code,name ", 0,
-                    20, startsWith, startsWith, fundId).getList());
-        else
-            schemeList.addAll(getPersistenceService().findPageBy(qry + " order by code,name  ", 0, 20, startsWith,
-                    startsWith).getList());
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Scheme List size : " + schemeList.size());
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Completed ajaxLoadSchemeBy20.");
-        return "schemeBy20";
-    }
-
+    
     @SuppressWarnings("unchecked")
     @Action(value = "/voucher/common-ajaxLoadSubSchemes")
     public String ajaxLoadSubSchemes() {
@@ -382,28 +363,143 @@ public class CommonAction extends BaseFormAction {
         return Constants.SUBSCHEMES;
     }
 
+//    @SuppressWarnings("unchecked")
+//    @Action(value = "/voucher/common-ajaxLoadSchemeBy20")
+//    public String ajaxLoadSchemeBy20() {
+//        if (LOGGER.isDebugEnabled())
+//            LOGGER.debug("Starting ajaxLoadSchemeBy20...");
+//        if (LOGGER.isDebugEnabled())
+//            LOGGER.debug("Fund Id received is :  " + fundId + "   and Startswith   :" + startsWith);
+//        startsWith = "%" + startsWith + "%";
+//        schemeList = new ArrayList<Scheme>();
+//        final String qry = "from Scheme  where upper(code) like upper(?) or upper(name) like upper(?) and isactive=true ";
+//        if (null != fundId && fundId != -1)
+//            schemeList.addAll(getPersistenceService().findPageBy(qry + " and fund.id=(?) order by code,name ", 0,
+//                    20, startsWith, startsWith, fundId).getList());
+//        else
+//            schemeList.addAll(getPersistenceService().findPageBy(qry + " order by code,name  ", 0, 20, startsWith,
+//                    startsWith).getList());
+//        if (LOGGER.isDebugEnabled())
+//            LOGGER.debug("Scheme List size : " + schemeList.size());
+//        if (LOGGER.isDebugEnabled())
+//            LOGGER.debug("Completed ajaxLoadSchemeBy20.");
+//        return "schemeBy20";
+//    }
+
+  
+
+//    @SuppressWarnings("unchecked")
+//    @Action(value = "/voucher/common-ajaxLoadSubSchemeBy20")
+//    public String ajaxLoadSubSchemeBy20() {
+//        if (LOGGER.isDebugEnabled())
+//            LOGGER.debug("Starting ajaxLoadSubSchemeBy20...");
+//        if (LOGGER.isDebugEnabled())
+//            LOGGER.debug("schemeId Id received is :  " + schemeId + "   and Startswith   :" + startsWith);
+//        startsWith = "%" + startsWith + "%";
+//        subSchemes = new ArrayList<SubScheme>();
+//        final String qry = "from SubScheme  where upper(code) like upper(?) or upper(name) like upper(?) and isactive=true ";
+//        if (null != schemeId)
+//            subSchemes.addAll(getPersistenceService().findPageBy(qry + " and scheme.id=(?) order by code,name",
+//                    0, 20, startsWith, startsWith, schemeId).getList());
+//        else
+//            subSchemes.addAll(getPersistenceService().findPageBy(qry + " order by code,name ", 0, 20,
+//                    startsWith, startsWith).getList());
+//        if (LOGGER.isDebugEnabled())
+//            LOGGER.debug("Scheme List size : " + subSchemes.size());
+//        if (LOGGER.isDebugEnabled())
+//            LOGGER.debug("Completed ajaxLoadSubSchemeBy20.");
+//        return "subSchemeBy20";
+//    }
+    
+    
+    
+    @SuppressWarnings("unchecked")
+    @Action(value = "/voucher/common-ajaxLoadSchemeBy20")
+    public String ajaxLoadSchemeBy20() {
+        System.out.println("continuing ");
+        if (LOGGER.isDebugEnabled()) LOGGER.debug("Starting ajaxLoadSchemeBy20...");
+        LOGGER.debug("Received startsWith: " + startsWith + ", fundId: " + fundId);
+        
+        startsWith = "%" + startsWith + "%";
+        schemeList = new ArrayList<Scheme>();
+        final String qry = "from Scheme where upper(code) like upper(?) or upper(name) like upper(?) and isactive=true ";
+
+        if (null != fundId && fundId != -1)
+            schemeList.addAll(getPersistenceService()
+                    .findPageBy(qry + " and fund.id=(?) order by code,name ", 0, 20, startsWith, startsWith, fundId)
+                    .getList());
+        else
+            schemeList.addAll(getPersistenceService()
+                    .findPageBy(qry + " order by code,name  ", 0, 20, startsWith, startsWith).getList());
+
+        LOGGER.debug("Scheme List size: " + schemeList.size());
+
+      
+        StringBuilder suggestionsHtml = new StringBuilder();
+        LOGGER.info(schemeList+"///////");
+        if (schemeList != null && !schemeList.isEmpty()) {
+            for (Scheme scheme : schemeList) {
+                suggestionsHtml.append(scheme.getName()).append(":").append(scheme.getId()).append("\n");
+            }
+        } else {
+            suggestionsHtml.append(""); 
+        }
+
+      
+        try {
+            HttpServletResponse response = ServletActionContext.getResponse();
+            response.setContentType("text/plain"); 
+            response.getWriter().write(suggestionsHtml.toString());
+            response.getWriter().flush();
+        } catch (IOException e) {
+            LOGGER.error("Error writing response", e);
+        }
+
+        return NONE;
+    }
+
     @SuppressWarnings("unchecked")
     @Action(value = "/voucher/common-ajaxLoadSubSchemeBy20")
     public String ajaxLoadSubSchemeBy20() {
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Starting ajaxLoadSubSchemeBy20...");
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("schemeId Id received is :  " + schemeId + "   and Startswith   :" + startsWith);
-        startsWith = "%" + startsWith + "%";
-        subSchemes = new ArrayList<SubScheme>();
-        final String qry = "from SubScheme  where upper(code) like upper(?) or upper(name) like upper(?) and isactive=true ";
-        if (null != schemeId)
-            subSchemes.addAll(getPersistenceService().findPageBy(qry + " and scheme.id=(?) order by code,name",
-                    0, 20, startsWith, startsWith, schemeId).getList());
-        else
-            subSchemes.addAll(getPersistenceService().findPageBy(qry + " order by code,name ", 0, 20,
-                    startsWith, startsWith).getList());
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Scheme List size : " + subSchemes.size());
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Completed ajaxLoadSubSchemeBy20.");
-        return "subSchemeBy20";
+        if (LOGGER.isDebugEnabled()) LOGGER.debug("Starting ajaxLoadSubSchemeBy20...");
+        LOGGER.debug("Received schemeId: " + schemeId);
+
+        List<SubScheme> subSchemeList = new ArrayList<SubScheme>();
+
+        // Construct query to fetch sub-schemes based on schemeId
+        final String qry = "from SubScheme where scheme.id = ? and isactive = true order by name";
+
+        // Fetch the sub-schemes from the database based on schemeId
+        subSchemeList = getPersistenceService()
+                .findPageBy(qry, 0, 20, schemeId)
+                .getList(); // Get the list of active sub-schemes
+
+        LOGGER.debug("Sub-Scheme List size: " + subSchemeList.size());
+
+        // Prepare the JSON response
+        List<Map<String, Object>> subSchemesJson = new ArrayList<>();
+        for (SubScheme subScheme : subSchemeList) {
+            Map<String, Object> subSchemeData = new HashMap<>();
+            subSchemeData.put("id", subScheme.getId());
+            subSchemeData.put("name", subScheme.getName());
+            subSchemesJson.add(subSchemeData);
+        }
+
+        try {
+            // Send the JSON response to the client
+            HttpServletResponse response = ServletActionContext.getResponse();
+            response.setContentType("application/json"); // Set content type as JSON
+            response.getWriter().write(new ObjectMapper().writeValueAsString(subSchemesJson)); // Convert to JSON and send
+            response.getWriter().flush();
+        } catch (IOException e) {
+            LOGGER.error("Error writing response", e);
+        }
+
+        return NONE;  // No further forwarding, as we're directly writing the response
     }
+
+
+
 
     @SuppressWarnings("unchecked")
     // @Deprecated

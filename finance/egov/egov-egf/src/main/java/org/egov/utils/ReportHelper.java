@@ -202,6 +202,20 @@ public class ReportHelper {
         }
         return inputStream;
     }
+    
+    public InputStream exportHtml2(InputStream inputStream, final String jasperPath,
+            final Map<String, Object> paramMap, final List dataSource, final String sizeUnitPoint) {
+        try {
+            exportReport(setUpAndGetJasperPrint(jasperPath, paramMap, dataSource), sizeUnitPoint);
+            inputStream = new ByteArrayInputStream(outputBytes.toByteArray());
+            closeStream(reportStream);
+        } catch (final JRException e) {
+            if (LOGGER.isDebugEnabled())
+                LOGGER.debug("Error" + e.getMessage());
+            throw new ApplicationRuntimeException("report.exception", e);
+        }
+        return inputStream;
+    }
 
     public InputStream exportHtml(InputStream inputStream,
             final JasperPrint jasperPrint) {

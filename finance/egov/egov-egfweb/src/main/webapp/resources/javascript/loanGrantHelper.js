@@ -296,7 +296,7 @@ function updateRevisedAmountTableIndex(){
 }
 function autocompleteUnmappedProjectCodesBy20(obj)
 {
-	   oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common!ajaxLoadUnmappedProjectCodesBy20.action", [ "~^"]);
+	   oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common-ajaxLoadUnmappedProjectCodesBy20.action", [ "~^"]);
 	   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 	   oACDS.scriptQueryParam = "startsWith";
 	   var oAutoComp1 = new YAHOO.widget.AutoComplete(obj.name,'codescontainer',oACDS);
@@ -344,12 +344,12 @@ var chequeNoAndDate={
 		}
 	}
 function loadChequeNoAndDate(billVhId,name){
-	var url = '../voucher/common!ajaxLoadChequeNoAndDate.action?billVhId='+billVhId;
+	var url = '../voucher/common-ajaxLoadChequeNoAndDate.action?billVhId='+billVhId;
 	YAHOO.util.Connect.asyncRequest('POST', url, chequeNoAndDate, null);
 }
 function openViewVouchers(obj)
 {
-	var url = '../voucher/voucherSearch!beforesearch.action?showMode=sourceLink';
+	var url = '../voucher/voucherSearch-beforesearch.action?showMode=sourceLink';
 	var val=	window.showModalDialog(url,"SearchBillVouchers","dialogwidth: 800; dialogheight: 600;");
 	if(val!=undefined && val!=null && val!="" && val.split("$").length>0)
 	{

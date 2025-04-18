@@ -49,6 +49,7 @@ package org.egov.egf.web.controller.common;
 
 import static org.egov.infra.web.support.json.adapter.HibernateProxyTypeAdapter.FACTORY;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -82,8 +83,10 @@ import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.model.bills.EgBillSubType;
+import org.egov.model.budget.BudgetResponse;
 import org.egov.model.masters.PurchaseOrder;
 import org.egov.model.masters.WorkOrder;
+import org.egov.services.budget.BudgetDetailService;
 import org.egov.services.masters.SchemeService;
 import org.egov.services.masters.SubSchemeService;
 import org.egov.utils.FinancialConstants;
@@ -157,6 +160,9 @@ public class AjaxCommonController {
 
     @Autowired
     private MicroserviceUtils microserviceUtils;
+    
+    @Autowired
+    private BudgetDetailService budgetDetailService;
 
     @GetMapping(value = "/getschemesbyfundid")
     @ResponseBody
@@ -368,5 +374,31 @@ public class AjaxCommonController {
             throw new ApplicationRuntimeException("Could not convert object list to json string", e);
         }
     }
+    
+    @GetMapping("/getBudgetAmountFromPurchaseOrder")
+    @ResponseBody
+	public BudgetResponse getDepartmentData(@RequestParam("purchaseOrder") String purchaseOrder) {
+		
+		PurchaseOrder puOrder = purchaseOrderService.getByOrderNumber(purchaseOrder);
+		BigDecimal budgetAmount = budgetDetailService.getAllBudgetAmountByDepartment(puOrder.getDepartment());
+		 return new BudgetResponse(budgetAmount);
+	}
+    
+    @GetMapping("/getBudgetAmountFromWorkOrder")
+    @ResponseBody
+	public BudgetResponse getBudgetAmountFromWorkOrder(@RequestParam("workOrder") String workOrder) {
+		
+		WorkOrder orderNumber = workOrderService.getByOrderNumber(workOrder);
+		BigDecimal budgetAmount = budgetDetailService.getAllBudgetAmountByDepartment(orderNumber.getDepartment());
+		 return new BudgetResponse(budgetAmount);
+	}
+	
+    @GetMapping("/getBudgetAmountByDepartment")
+    @ResponseBody
+	public BudgetResponse getBudgetByDepartment(@RequestParam("department") String department) {
+		
+		BigDecimal budgetAmount = budgetDetailService.getAllBudgetAmountByDepartment(department);
+		 return new BudgetResponse(budgetAmount);
+	}
 
 }

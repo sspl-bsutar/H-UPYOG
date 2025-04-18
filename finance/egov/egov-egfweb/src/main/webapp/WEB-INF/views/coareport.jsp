@@ -145,13 +145,9 @@
 									code="lbl.accountdetailtype" text="Account detail type"/>:</label>
 							<div class="col-sm-3 add-margin">
 								<form:select name="detailTypeId" path=""
-									data-first-option="false" id="detailTypeId"
-									cssClass="form-control">
-									<form:option value="">
-										<spring:message code="lbls.select" text="Select"/>
-									</form:option>
-									<form:options items="${accountDetailTypeList}" itemValue="id"
-										itemLabel="name" />
+									data-first-option="false" id="detailTypeId"	cssClass="form-control">
+									<form:option value=""><spring:message code="lbls.select" text="Select"/></form:option>
+									<form:options items="${accountDetailTypeList}" itemValue="id" itemLabel="name" />
 								</form:select>
 							</div>
 
@@ -168,8 +164,8 @@
 										<spring:message code="lbl.select" text="Select"/>
 									</option>
 									<option value="true"><spring:message code="lbl.yes" text="Yes"/></option>
-									<option value="false"><spring:message code="lbl.no" text="No"/></:option>
-									<option value=""><spring:message code="lbl.all" text="All"/></:option>
+									<option value="false"><spring:message code="lbl.no" text="No"/></option>
+									<option value=""><spring:message code="lbl.all" text="All"/></option>
 									</select>
 							</div>
 
@@ -182,14 +178,8 @@
 										<spring:message code="lbl.select" text="Select"/>
 									</option>
 									<option value="true"><spring:message code="lbl.yes" text="Yes"/>
-										</:option>
-									
 									<option value="false"><spring:message code="lbl.no" text="No"/>
-										</:option>
-									
 									<option value=""><spring:message code="lbl.all" text="All"/>
-										</:option>
-								
 								</select>
 
 							</div>
@@ -205,13 +195,11 @@
 										<spring:message code="lbl.select" text="Select"/>
 									</option>
 									<option value="true"><spring:message code="lbl.yes" text="Yes"/>
-										</:option>
-									
 									<option value="false"><spring:message code="lbl.no" text="No"/>
-										</:option>
+										
 									
 									<option value=""><spring:message code="lbl.all" text="All"/>
-										</:option>
+										
 								
 								</select>
 							</div>

@@ -99,7 +99,7 @@
 	    //Remove whitespaces from name;
 	    var whitespace = new RegExp("\\s","g");
 	    name = name.replace(whitespace,"");
-	var leftPos=document.body.clientWidth;
+	    var leftPos=document.body.clientWidth;
 	    //If it is already open
 	    if (!myPopupWindow.closed && myPopupWindow.location)
 	    {

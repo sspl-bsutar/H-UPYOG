@@ -110,6 +110,9 @@ public class ApplicationConfigManager {
     @Value("${egov.services.collection.service.payment.modulename.workflow:}")
     private String collSerPaymentModuleNameWorkflow;
 
+	/* Author : Megha 07/03/2025 */
+    @Value("${egov.services.master.mdms.search.url:}")
+    private String egovMdmsSerUrlForTenantSearch;
     
     public String getEgovHrmsSerHost(){
         return StringUtils.isNotBlank(egovHrmsSerHost) ? egovHrmsSerHost : egovSerHost; 
@@ -154,7 +157,9 @@ public class ApplicationConfigManager {
     public String getEgovFileStoreDownloadFile(){
         return StringUtils.isNotBlank(egovFileStoreDownloadFile) ? egovFileStoreDownloadFile : egovSerHost; 
     }
-    
-    
+    /* Author : Megha 27/03/2025 */
+    public String getEgovMdmsSerUrlForTenantSearch(){
+        return StringUtils.isNotBlank(egovMdmsSerUrlForTenantSearch) ? egovMdmsSerUrlForTenantSearch : egovSerHost; 
+    }
     
 }

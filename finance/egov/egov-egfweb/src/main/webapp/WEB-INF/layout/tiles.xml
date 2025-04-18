@@ -436,40 +436,30 @@
     </definition>
 
     <definition name="budgetcheckconfig-new" extends="base_layout">
-        <put-attribute name="page-title" value="title.budgetcheckconfig.new"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetcheckconfig/budgetcheckconfig-new.jsp"/>
+        <put-attribute name="page-title" value="title.budgetcheckconfig.new" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetcheckconfig/budgetcheckconfig-new.jsp"/>
     </definition>
 
     <definition name="budgetcheckconfig-view" extends="base_layout">
-        <put-attribute name="page-title" value="title.budgetcheckconfig.view"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetcheckconfig/budgetcheckconfig-view.jsp"/>
+        <put-attribute name="page-title" value="title.budgetcheckconfig.view" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetcheckconfig/budgetcheckconfig-view.jsp"/>
     </definition>
 
 
     <definition name="budgetcheckconfig-result" extends="base_layout">
-        <put-attribute name="page-title" value="title.budgetcheckconfig.result"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetcheckconfig/budgetcheckconfig-result.jsp"/>
+        <put-attribute name="page-title" value="title.budgetcheckconfig.result" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetcheckconfig/budgetcheckconfig-result.jsp"/>
     </definition>
 
 
     <definition name="budgetgroup-new" extends="base_layout">
-        <put-attribute name="page-title" value="title.budgetgroup.new"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetgroup/budgetgroup-new.jsp"/>
+        <put-attribute name="page-title" value="title.budgetgroup.new" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetgroup/budgetgroup-new.jsp"/>
     </definition>
 
     <definition name="budgetgroup-view" extends="base_layout">
-        <put-attribute name="page-title" value="title.budgetgroup.view"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetgroup/budgetgroup-view.jsp"/>
+        <put-attribute name="page-title" value="title.budgetgroup.view" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetgroup/budgetgroup-view.jsp"/>
     </definition>
 
     <definition name="budgetgroup-edit" extends="base_layout">
@@ -480,52 +470,38 @@
     </definition>
 
     <definition name="budgetgroup-result" extends="base_layout">
-        <put-attribute name="page-title" value="title.budgetgroup.result"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetgroup/budgetgroup-result.jsp"/>
+        <put-attribute name="page-title" value="title.budgetgroup.result" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetgroup/budgetgroup-result.jsp"/>
     </definition>
 
     <definition name="budgetgroup-search" extends="base_layout">
-        <put-attribute name="page-title" value="title.budgetgroup.search"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetgroup/budgetgroup-search.jsp"/>
+        <put-attribute name="page-title" value="title.budgetgroup.search" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetgroup/budgetgroup-search.jsp"/>
     </definition>
 
     <definition name="budgetdefinition-new" extends="base_layout">
-        <put-attribute name="page-title" value="title.budget.new"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetdefinition/budgetdefinition-new.jsp"/>
+        <put-attribute name="page-title" value="title.budget.new" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetdefinition/budgetdefinition-new.jsp"/>
     </definition>
 
     <definition name="budgetdefinition-view" extends="base_layout">
-        <put-attribute name="page-title" value="title.budget.view"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetdefinition/budgetdefinition-view.jsp"/>
+        <put-attribute name="page-title" value="title.budget.view" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetdefinition/budgetdefinition-view.jsp"/>
     </definition>
 
     <definition name="budgetdefinition-edit" extends="base_layout">
-        <put-attribute name="page-title" value="title.budget.edit"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetdefinition/budgetdefinition-edit.jsp"/>
+        <put-attribute name="page-title" value="title.budget.edit" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetdefinition/budgetdefinition-edit.jsp"/>
     </definition>
 
     <definition name="budgetdefinition-result" extends="base_layout">
-        <put-attribute name="page-title" value="title.budget.result"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetdefinition/budgetdefinition-result.jsp"/>
+        <put-attribute name="page-title" value="title.budget.result" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetdefinition/budgetdefinition-result.jsp"/>
     </definition>
 
     <definition name="budgetdefinition-search" extends="base_layout">
-        <put-attribute name="page-title" value="title.budget.search"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetdefinition/budgetdefinition-search.jsp"/>
+        <put-attribute name="page-title" value="title.budget.search" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetdefinition/budgetdefinition-search.jsp"/>
     </definition>
 
     <definition name="expensebill-form" extends="base_layout">
@@ -549,24 +525,18 @@
     </definition>
 
     <definition name="budgetapproval-new" extends="base_layout">
-        <put-attribute name="page-title" value="title.budget.new"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetapproval/budgetapproval-new.jsp"/>
+        <put-attribute name="page-title" value="title.budget.new" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetapproval/budgetapproval-new.jsp"/>
     </definition>
 
     <definition name="budgetapproval-result" extends="base_layout">
-        <put-attribute name="page-title" value="title.budget.result"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetapproval/budgetapproval-result.jsp"/>
+        <put-attribute name="page-title" value="title.budget.result" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetapproval/budgetapproval-result.jsp"/>
     </definition>
 
     <definition name="budgetapproval-search" extends="base_layout">
-        <put-attribute name="page-title" value="title.budget.approval"
-                       cascade="true"/>
-        <put-attribute name="body"
-                       value="/WEB-INF/views/budgetapproval/budgetapproval-search.jsp"/>
+        <put-attribute name="page-title" value="title.budget.approval" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/budgetapproval/budgetapproval-search.jsp"/>
     </definition>
 
     <definition name="journalvoucher-form" extends="base_layout">
@@ -844,4 +814,30 @@
         <put-attribute name="page-title" value="lbl.unauthorized" cascade="true"/>
         <put-attribute name="body" value="/WEB-INF/views/common/unauthorized.jsp"/>
     </definition>
+    
+
+     <definition name="grantAmountTransfer-new" extends="base_layout">
+		<put-attribute name="page-title" value="title.grantAmountTransfer.create" cascade="true"/>
+		<put-attribute name="body" value="/WEB-INF/views/grantAmountTransfer/grantAmountTransfer-new.jsp"/>
+	</definition>
+	<definition name="grantAmountTransfer-result" extends="base_layout">
+		<put-attribute name="page-title" value="title.grantAmountTransfer.result" cascade="true"/>
+		<put-attribute name="body" value="/WEB-INF/views/grantAmountTransfer/grantAmountTransfer-result.jsp"/>
+	</definition>
+	<definition name="grantAmountTransfer-edit" extends="base_layout">
+		<put-attribute name="page-title" value="title.grantAmountTransfer.edit" cascade="true"/>
+		<put-attribute name="body" value="/WEB-INF/views/grantAmountTransfer/grantAmountTransfer-edit.jsp"/>
+	</definition>
+	<definition name="grantAmountTransfer-view" extends="base_layout">
+		<put-attribute name="page-title" value="title.grantAmountTransfer.view" cascade="true"/>
+		<put-attribute name="body" value="/WEB-INF/views/grantAmountTransfer/grantAmountTransfer-view.jsp"/>
+	</definition>
+	<definition name="grantAmountTransfer-search" extends="base_layout">
+		<put-attribute name="page-title" value="title.grantAmountTransfer.search" cascade="true"/>
+		<put-attribute name="body" value="/WEB-INF/views/grantAmountTransfer/grantAmountTransfer-search.jsp"/>
+	</definition>
+	<definition name="grantAmountTransfer-cancellationsuccess" extends="base_layout">
+		<put-attribute name="page-title" value="title.grantAmountTransfer.canellation.success" cascade="true"/>
+		<put-attribute name="body" value="/WEB-INF/views/grantAmountTransfer/grantAmountTransfer-cancellationsuccess.jsp"/>
+	</definition>
 </tiles-definitions>

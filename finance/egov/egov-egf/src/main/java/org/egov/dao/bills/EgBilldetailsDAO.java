@@ -74,11 +74,9 @@ public interface EgBilldetailsDAO {
     public EgBilldetails getBillDetails(Long billId, List glcodeIdList);
     EgBilldetails  findById(Number  id, boolean lock);
 
-   List<  EgBilldetails  > findAll();
-
-
-     EgBilldetails   create(  EgBilldetails   entity);
-     EgBilldetails   update(  EgBilldetails   entity);
+    List<  EgBilldetails  > findAll();
+    EgBilldetails   create(  EgBilldetails   entity);
+    EgBilldetails   update(  EgBilldetails   entity);
 
    void delete(  EgBilldetails   entity);
 }

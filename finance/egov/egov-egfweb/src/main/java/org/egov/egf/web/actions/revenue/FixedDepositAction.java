@@ -81,7 +81,9 @@ import java.util.Map;
         @Result(name = "PDF", type = "stream", location = "inputStream", params = { "inputName", "inputStream", "contentType",
                 "application/pdf", "contentDisposition", "no-cache;filename=FixedDepositReport.pdf" }),
                 @Result(name = "XLS", type = "stream", location = "inputStream", params = { "inputName", "inputStream", "contentType",
-                        "application/xls", "contentDisposition", "no-cache;filename=FixedDepositReport.xls" })
+                        "application/xls", "contentDisposition", "no-cache;filename=FixedDepositReport.xls" }),
+                @Result(name = FixedDepositAction.NEW, location = "fixedDeposit-" + FixedDepositAction.NEW + ".jsp"),
+                @Result(name = "new", location = "fixedDeposit-new.jsp")
 })
 @ParentPackage("egov")
 

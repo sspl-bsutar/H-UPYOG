@@ -49,6 +49,7 @@ package org.egov.egf.masters.repository;
 
 import java.util.List;
 
+import org.egov.model.masters.PurchaseItems;
 import org.egov.model.masters.PurchaseOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -70,5 +71,10 @@ public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Lo
     public List<PurchaseOrder> findBySupplier_Id(Long id);
 
     public PurchaseOrder findByOrderNumber(String orderNumber);
+	
+    public PurchaseItems save(PurchaseItems purchaseItems);
+	
+	@Query("SELECT MAX(po.id) FROM PurchaseOrder po")
+    Long findMaxId();
 
 }

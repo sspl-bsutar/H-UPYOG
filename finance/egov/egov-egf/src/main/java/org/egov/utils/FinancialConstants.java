@@ -106,7 +106,7 @@ public interface FinancialConstants {
 	// Status for Supplier Bills
 	public static final String SUPPLIERBILL_CREATED_STATUS = "Created";
 	public static final String SUPPLIERBILL_CANCELLED_STATUS = "Cancelled";
-	public static final String SUPPLIERBILL_APPROVED_STATUS="Approved";
+	public static final String SUPPLIERBILL_APPROVED_STATUS = "Approved";
 	public static final String SUPPLIERBILL_PASSED_STATUS = "Passed";
 	public static final String SUPPLIERBILL_PAID_STATUS = "Paid";
 	public static final String SUPPLIERBILL_REJECTED_STATUS = "Rejected";
@@ -117,7 +117,6 @@ public interface FinancialConstants {
 	public static final String CONTRACTORBILL_PASSED_STATUS = "Passed";
 	public static final String CONTRACTORBILL_PAID_STATUS = "Paid";
 	public static final String CONTRACTORBILL_REJECTED_STATUS = "REJECTED";
-	
 
 	// Status for Pension Bills
 	public static final String PENSIONBILL_CANCELLED_STATUS = "Cancelled";
@@ -212,6 +211,8 @@ public interface FinancialConstants {
 	public static final String STANDARD_VOUCHER_TYPE_PAYMENT = "Payment";
 	public static final String STANDARD_VOUCHER_TYPE_RECEIPT = "Receipt";
 	public static final String STANDARD_VOUCHER_TYPE_JOURNAL = "Journal Voucher";
+	public static final String STANDARD_VOUCHER_TYPE_PT_RECEIPT = "PT Receipt";
+	public static final String STANDARD_VOUCHER_TYPE_PT_DEMAND = "PT Demand";
 	// Contra related - Voucher Names
 	public static final String CONTRAVOUCHER_NAME_BTOB = "BankToBank";
 	public static final String CONTRAVOUCHER_NAME_BTOC = "BankToCash";
@@ -456,5 +457,4 @@ public interface FinancialConstants {
 	public static final Integer FINANCIALYEAR_STARTING_MONTH = 4;
 	public static final String EMPTY_STRING = "";
 
-	
 }

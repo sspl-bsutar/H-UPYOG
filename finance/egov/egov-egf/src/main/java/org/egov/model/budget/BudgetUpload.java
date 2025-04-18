@@ -98,8 +98,18 @@ public class BudgetUpload  {
     private CChartOfAccounts coa;
     
    private MultipartFile budgetInXls;
+   
+   private String tenantId;
 
-    public Long getId() {
+    public String getTenantId() {
+	return tenantId;
+}
+
+public void setTenantId(String tenantId) {
+	this.tenantId = tenantId;
+}
+
+	public Long getId() {
         return id;
     }
 

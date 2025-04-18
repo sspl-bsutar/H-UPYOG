@@ -61,7 +61,9 @@ import java.util.List;
 @Repository
 public interface BankAccountRepository extends JpaRepository<Bankaccount, Long> {
 
-    Bankaccount findByChartofaccounts_Glcode(final String glcode);
+	Bankaccount findByChartofaccounts_Glcode(final String glcode);
 
-    List<Bankaccount> findByBankbranch_Id(final Integer branchId);
+	List<Bankaccount> findByBankbranch_Id(final Integer branchId);
+
+	List<Bankaccount> findByIsactiveTrue();
 }

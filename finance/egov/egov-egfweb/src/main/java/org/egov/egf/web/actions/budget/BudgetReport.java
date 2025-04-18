@@ -60,6 +60,7 @@ public class BudgetReport
     private Department department;
     private CFunction function;
     private String type;
+    private String tenantId;
     private static Map<String, String> typeValue = new HashMap<String, String>();
     static {
         typeValue.put("I", "Revenue");
@@ -104,5 +105,13 @@ public class BudgetReport
     static String getValueFor(final String type) {
         return typeValue.get(type);
     }
+
+	public String getTenantId() {
+		return tenantId;
+	}
+
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
+	}
 
 }

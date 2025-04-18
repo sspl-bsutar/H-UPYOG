@@ -200,4 +200,18 @@ public class ContractorService implements EntityTypeService {
 		return Collections.emptyList();
 	}
 
+	public String fetchLastId() {
+	    Long lastId =  contractorRepository.findMaxId()+1;
+	    String code;
+	    if(lastId != null) {
+	    	if(lastId < 1000) 
+	    		code = "Con/001/"+String.format("%04d", lastId);
+	    	else
+	    		code = "Con/001/"+lastId;
+	    }
+	    else
+	    	code = "Con/001/0001";
+	    return  code;
+	}
+	
 }

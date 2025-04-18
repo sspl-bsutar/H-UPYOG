@@ -1411,7 +1411,7 @@ public class MicroserviceUtils {
         }
         return tenentId.split(Pattern.quote("."))[1] + " " + (ulbGrade != null ? ulbGrade : "");
     }
-
+    
     private void prepareModuleDetails(List<ModuleDetail> moduleDetailsList, String moduleNme, String masterName,
             String filterKey, String filterValue, Class filterType) {
         List<MasterDetail> masterDetails = new ArrayList<>();
@@ -1873,6 +1873,7 @@ public class MicroserviceUtils {
         }
         return null;
     }
+
 
    
 

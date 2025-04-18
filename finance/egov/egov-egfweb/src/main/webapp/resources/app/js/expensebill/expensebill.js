@@ -193,6 +193,40 @@ function deleteHiddenSubledgerRow(){
 		deleteRow($(".subLedgerAmount_0")[0],'tblsubledgerdetails');
 	}
 }
+
+$('#department').change(function () {
+	
+	loadBudgetAmount($('#department').val());
+	
+});
+
+function loadBudgetAmount(department){
+	 console.log("department: " + department);
+        $.ajax({
+            url: '/services/EGF/common/getBudgetAmountByDepartment', 
+            type: 'GET',
+            data: {
+                department: department
+            },
+            success: function(response) {
+                console.log("Response from server:", response);
+           
+            if (response == null || response.budgetAmount == null) {
+               $('#budgetAmount').text(0.0);
+            } else {
+                $('#budgetAmount').text(response.budgetAmount);
+            }
+            
+            },
+            error: function(xhr, status, error) {
+               
+                console.error('Error:', status, error);
+                alert('Error occurred while sending data');
+            }
+        });
+        }
+
+
 function debitGlcode_initialize() {
 	 var custom = new Bloodhound({
 	    datumTokenizer: function(d) { return d.tokens; },

@@ -154,6 +154,17 @@ public class EgBillregister extends StateAware implements java.io.Serializable {
     @Transient
     @SafeHtml
     private String approvalComent;
+    @Transient
+    private String purchaseObject;
+    
+    
+	public String getPurchaseObject() {
+		return purchaseObject;
+	}
+
+	public void setPurchaseObject(String purchaseObject) {
+		this.purchaseObject = purchaseObject;
+	}
 
     public EgBillregister() {
     }

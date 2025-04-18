@@ -110,7 +110,7 @@ var fromDateToDateAlertMsg = '<spring:message code="msg.fromDate.must.be.lower.t
 						
 						<div class="form-group">
 							<label class="col-sm-3 control-label text-right"><spring:message
-									code="lbl.service"/>:</label>
+									code="lbl.service"/>:<span class="mandatory"></span></label>
 							<div class="col-sm-3 add-margin">
 								<form:select name="service" path=""
 									data-first-option="false" id="serviceId"

@@ -106,6 +106,7 @@ $('#workOrder').change(function () {
 	$('#subSchemeId').val("");
 	$('#subSchemeName').val("");
 	loadMisAttributes($('#workOrder').val());
+	loadBudgetAmount($('#workOrder').val());
 });
 
 $('.btn-wf-primary').click(function(){
@@ -552,6 +553,33 @@ function loadMisAttributes(orderNumber){
 
 	}
 }
+
+function loadBudgetAmount(workOrder){
+	 console.log("workOrder: " + workOrder);
+        $.ajax({
+            url: '/services/EGF/common/getBudgetAmountFromWorkOrder', 
+            type: 'GET',
+            data: {
+                workOrder: workOrder
+            },
+            success: function(response) {
+                console.log("Response from server:", response);
+           
+            if (response == null || response.budgetAmount == null) {
+               $('#budgetAmount').text(0.0);
+            } else {
+                $('#budgetAmount').text(response.budgetAmount);
+            }
+            
+            },
+            error: function(xhr, status, error) {
+               
+                console.error('Error:', status, error);
+                alert('Error occurred while sending data');
+            }
+        });
+        }
+
 
 function loadAccountCodeTemplate(){
 		$.ajax({

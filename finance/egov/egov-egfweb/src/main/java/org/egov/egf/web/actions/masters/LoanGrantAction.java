@@ -276,7 +276,7 @@ public class LoanGrantAction extends LoanGrantBaseAction {
         revisedAmountLGDetails.add(new LoanGrantDetail());
         //persistenceService.setType(FundingAgency.class);
         fundingAgencyList = new ArrayList<FundingAgency>();
-        fundingAgencyList.addAll(persistenceService.findAllBy(" from FundingAgency where isActive=true order by name"));
+        fundingAgencyList.addAll(persistenceService.findAllBy(" from FundingAgency where isActive=1 order by name"));
         loanGrantHeader.getReceiptList().add(new LoanGrantReceiptDetail());
         return "new";
     }

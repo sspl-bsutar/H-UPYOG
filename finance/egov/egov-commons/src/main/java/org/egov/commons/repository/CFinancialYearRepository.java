@@ -88,5 +88,10 @@ public interface CFinancialYearRepository extends JpaRepository<CFinancialYear, 
     //Get any financial year by date
     @Query("from CFinancialYear cfinancialyear where cfinancialyear.startingDate <=:givenDate and cfinancialyear.endingDate >=:givenDate ")
     CFinancialYear getFinancialYearByDate(@Param("givenDate") Date givenDate);
+    
+  //Get any financial year by date Range added by raju
+    @Query("from CFinancialYear cfinancialyear where cfinancialyear.startingDate <=:startingDate and cfinancialyear.endingDate >=:endingDate order by id desc ")
+    List<CFinancialYear> getFinancialYearByDateRange(@Param("startingDate") Date startingDate,@Param("endingDate") Date endingDate);
+
 
 }

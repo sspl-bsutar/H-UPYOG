@@ -710,9 +710,8 @@ public class ReceiptAction extends BaseFormAction {
 		ReceiptResponse receiptResponse = receiptHeaderService.populateAndPersistReceipts(receiptHeader,
 				receiptInstrList);
 
-		message = "Receipt created with receipt number: "
-				+ receiptResponse.getReceipts().get(0).getBill().get(0).getBillDetails().get(0).getReceiptNumber();
-		// populate all receipt header ids except the cancelled receipt
+		message = "Receipt created with receipt number: "+ receiptResponse.getReceipts().get(0).getBill().get(0).getBillDetails().get(0).getReceiptNumber();
+		// populate all receipt header ids except the cancelled receipt   getReceipts().get(0).getBill().get(0).getBillDetails().get(0).getReceiptNumber();
 		// (in effect the newly created receipts)
 		selectedReceipts = new String[noOfNewlyCreatedReceipts];
 		int i = 0;

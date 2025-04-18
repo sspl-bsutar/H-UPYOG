@@ -2112,6 +2112,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         budgetUpload.getCoa().getId(), fyear, budgetType);
 
                 if (temp != null) {
+                	
                     if (temp.getStatus().getCode().equalsIgnoreCase("Created")) {
                         BigDecimal amount;
                         if (budgetType.equalsIgnoreCase(RE))
@@ -2137,6 +2138,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         budgetUpload.setFinalStatus("Already budget is defined for this combination and Approved");
                         tempList.add(budgetUpload);
                     }
+                    budgetDetail.setTenantId(budgetUpload.getTenantId());
 
                 } else if (temp == null) {
 
@@ -2145,6 +2147,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                     budgetDetail.setExecutingDepartment(budgetUpload.getDeptCode());
                     budgetDetail.setAnticipatoryAmount(BigDecimal.ZERO);
                     budgetDetail.setPlanningPercent(BigDecimal.valueOf(budgetUpload.getPlanningPercentage()));
+                    budgetDetail.setTenantId(budgetUpload.getTenantId());
                     if (budgetType.equalsIgnoreCase(RE)) {
                         budgetDetail.setOriginalAmount(budgetUpload.getReAmount());
                         budgetDetail.setApprovedAmount(budgetUpload.getReAmount());
@@ -2737,6 +2740,9 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
 
     public BudgetDetail getBudgetDetailByReferencceBudget(final String uniqueNo, final Long budgetId) {
         return budgetDetailRepository.findByReferenceBudget(uniqueNo, budgetId);
+    }
+    public BigDecimal getAllBudgetAmountByDepartment(String department) {
+    	return budgetDetailRepository.getAllBudgetAmountByDepartment(department);
     }
 
 }

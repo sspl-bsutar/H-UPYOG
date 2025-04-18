@@ -63,15 +63,20 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
+import org.egov.commons.Bankaccount;
 import org.egov.commons.CChartOfAccounts;
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.CFunction;
 import org.egov.commons.dao.FinancialYearDAO;
+import org.egov.egf.masters.services.GrantAmountTransferService;
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.service.EisCommonService;
 import org.egov.infra.admin.master.entity.AppConfigValues;
@@ -80,6 +85,7 @@ import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.ApplicationConfigManager;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
@@ -102,6 +108,9 @@ import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
+import org.springframework.ui.Model;
+
+import com.opensymphony.xwork2.ActionContext;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -116,6 +125,15 @@ import net.sf.jasperreports.engine.JRException;
         @Result(name = "department-HTML", type = "stream", location = Constants.INPUT_STREAM, params = { Constants.INPUT_NAME,
                 Constants.INPUT_STREAM,
                 Constants.CONTENT_TYPE, "text/html" }),
+        @Result(name = "ulb-HTML", type = "stream", location = Constants.INPUT_STREAM, params = { Constants.INPUT_NAME,
+                Constants.INPUT_STREAM,
+                Constants.CONTENT_TYPE, "text/html" }),
+        @Result(name = "ulb-PDF", type = "stream", location = Constants.INPUT_STREAM, params = { Constants.INPUT_NAME,
+                Constants.INPUT_STREAM,
+                Constants.CONTENT_TYPE, "application/pdf", Constants.CONTENT_DISPOSITION, "no-cache;filename=ULBWiseBudgetReport.pdf" }),
+        @Result(name = "ulb-XLS", type = "stream", location = Constants.INPUT_STREAM, params = { Constants.INPUT_NAME,
+                Constants.INPUT_STREAM,
+                Constants.CONTENT_TYPE, "application/xls", Constants.CONTENT_DISPOSITION, "no-cache;filename=ULBWiseBudgetReport.xls" }),
         @Result(name = "functionwise-PDF", type = "stream", location = Constants.INPUT_STREAM, params = { Constants.INPUT_NAME,
                 Constants.INPUT_STREAM,
                 Constants.CONTENT_TYPE, "application/pdf", Constants.CONTENT_DISPOSITION,
@@ -135,9 +153,15 @@ import net.sf.jasperreports.engine.JRException;
         @Result(name = "functionwise", location = "budgetReport-functionwise.jsp"),
         @Result(name = "atGlance", location = "budgetReport-atGlance.jsp"),
         @Result(name = "dept", location = "budgetReport-dept.jsp"),
+        @Result(name = "ulb", location = "budgetReport-ulb.jsp"),  // by Megha 27/03/2025
+        @Result(name = "ulbprint", location = "budgetReport-ulbprint.jsp"),  // by Megha 27/03/2025
 })
 public class BudgetReportAction extends BaseFormAction {
+	
+	
+	private static final String requestBody = "{\"MdmsCriteria\":{\"tenantId\":\"pg\",\"moduleDetails\":[{\"moduleName\":\"tenant\",\"masterDetails\":[{\"name\":\"tenants\"},{\"name\":\"citymodule\"}]}]},\"RequestInfo\":{\"apiId\":\"Rainmaker\",\"msgId\":\"1714627621738|en_IN\",\"plainAccessRequest\":{}}}";  // by Megha 27/03/2025
     private static final String DEPTWISEPATH = "/reports/templates/departmentWiseBudgetReport.jasper";
+    private static final String ULBWISEPATH = "/reports/templates/ulbwise.jasper";
     private static final String FUNCTIONWISEPATH = "/reports/templates/budgetReportFunctionwise.jasper";
     private static final String WORKINGCOPYFORFINALAPPROVER = "/reports/templates/budgetReportWorkingCopyForFinalApprover.jasper";
     private static final String WORKINGCOPYWITHALLMOUNTS = "/reports/templates/budgetReportWorkingCopy.jasper";
@@ -192,7 +216,25 @@ public class BudgetReportAction extends BaseFormAction {
     private EgovMasterDataCaching masterDataCache;
     
     @Autowired
+	private ApplicationConfigManager applicationConfigManager;
+    
+    @Autowired
+	private GrantAmountTransferService grantAmountTransferService;
+    
+    @Autowired
     private Environment environment;
+    
+    private String ulb; // Holds selected ULB ID
+
+    public String getUlb() {
+        return ulb;
+    }
+
+    public void setUlb(String ulb) {
+        this.ulb = ulb;
+    }
+    
+    
 
     public boolean isDepartmentBudget() {
         return departmentBudget;
@@ -256,6 +298,13 @@ public class BudgetReportAction extends BaseFormAction {
                 "from CFinancialYear where isActive=true  order by finYearRange desc "));
         setRelatedEntitesOn();
         majorCodeLength = Integer.valueOf(getAppConfigValueFor(Constants.EGF, "coa_majorcode_length"));
+        // by Megha 27/03/2025
+        String url = applicationConfigManager.getEgovMdmsSerHost()+applicationConfigManager.getEgovMdmsSerUrlForTenantSearch();
+      
+        Map<String, String> responseMap = grantAmountTransferService.getTenantApi(url, requestBody);
+
+        List<Map.Entry<String, String>> ulbList = new ArrayList<>(responseMap.entrySet());
+        addDropdownData("ulbList", ulbList);
     }
 
     @Action(value = "/budget/budgetReport-getFunctionwiseReport")
@@ -1182,13 +1231,114 @@ public class BudgetReportAction extends BaseFormAction {
         for (final CChartOfAccounts coa : coaList)
             coaMap.put(coa.getGlcode(), coa.getName());
     }
-
+    
     @Action(value = "/budget/budgetReport-departmentWiseReport")
     public String departmentWiseReport() {
         return "dept";
     }
+    
+    // Author : Megha 27/03/2025
+    @Action(value = "/budget/budgetReport-ulbWiseReport")
+    public String ulbWiseReport() {
+        return "ulb";
+    }
+    
+    
+    @ValidationErrorPage(value = "ulb")
+    @Action(value = "/budget/budgetReport-printULBWiseReport")
+    public String printULBWiseReport() {
+        try {
+        	
+            validateFinancialYear();
+        } catch (final ValidationException e)
+        {
+            throw new ValidationException(Arrays.asList(new ValidationError(e.getErrors().get(0).getMessage(),
+                    e.getErrors().get(0).getMessage())));
+        } 
+        return "ulbprint";
+    }
+    
+ // Author : Megha 03/04/2025
+    @ReadOnly
+	private void populateULBData() {
+		
+		final String finalStatus = getFinalStatus();
+		final String isBeRe = getBudgetType(finalStatus);
+		String ulbQuery = "";
+		if (budgetReport.getTenantId() != null && budgetReport.getTenantId() != "" && !"".equals(budgetReport.getTenantId()))
+		ulbQuery = " and bd.tenantId=:execulb ";
+		getBudgetReappropriationAmt();
+		final String budgetType = BudgetReport.getValueFor(budgetReport.getType());
+		if (budgetType != null && !"ALL".equals(budgetReport.getType()))
+			budgetReportList
+					.add(new BudgetReportView("", " ULBWise BUDGET SUMMARY", "", null, null, null));
+		// budgetdetails for all mincode
+		final LinkedList<BudgetDetail> budgetDetails = new LinkedList<BudgetDetail>();
+		fetchUlbBudgetDetails(budgetDetails, ulbQuery, finalStatus, isBeRe, "minCode");
+		// budgetdetails for all majorcode
+		fetchUlbBudgetDetails(budgetDetails, ulbQuery, finalStatus, isBeRe, "majorCode");
+		populateULBSummarySection(budgetDetails, isBeRe);
+		addRowsToReport(budgetDetails, isBeRe);
+		
+	}
+    
+ // Author : Megha 04/04/2025
+    void fetchUlbBudgetDetails(final List<BudgetDetail> budgetDetails, final String ulbQuery, final String finalStatus,
+			final String budgetType, final String code) {
 
-    @ValidationErrorPage(value = "dept")
+		final Map<String, Object> params = new HashMap<>();
+		final Query query = persistenceService.getSession()
+				.createQuery(new StringBuilder(" from BudgetDetail bd where bd.budget.financialYear.id=:finYearId ")
+						.append(ulbQuery).append(" and bd.budget.isbere=:isBeRe and bd.budget.status.code =:status ")
+						.append(getQueryForSelectedType(code, params))
+						.append(String.format("  order by bd.budgetGroup.%s.glcode", code)).toString())
+				.setParameter("finYearId", budgetReport.getFinancialYear().getId(), LongType.INSTANCE)
+				.setParameter("isBeRe", budgetType, StringType.INSTANCE)
+				.setParameter("status", finalStatus, StringType.INSTANCE);
+		System.out.println("ulb Query"+ulbQuery);
+		
+		if (!ulbQuery.equals("")) {
+			query.setParameter("execulb", budgetReport.getTenantId(), StringType.INSTANCE);
+		}
+		
+		System.out.println("query"+query);
+		persistenceService.populateQueryWithParams(query, params);
+		final List<BudgetDetail> results = query.list();
+		budgetDetails.addAll(results);
+	}
+    
+    @Action(value = "/budget/budgetReport-ajaxGenerateULBWiseHtml")
+    public String ajaxGenerateULBWiseHtml() {
+    	 HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
+    	    String tenantId = request.getParameter("model.ulb");
+    	    
+    	    if (tenantId != null && !tenantId.isEmpty()) {
+    	        budgetReport.setTenantId(tenantId);  
+    	    }
+        populateULBData();
+        inputStream = reportHelper.exportHtml2(inputStream, ULBWISEPATH, getParamMap(), budgetReportList, "pt");
+        return "ulb-HTML";
+    } 
+   
+    @Action(value = "/budget/budgetReport-generateULBWiseXls")
+    public String generateULBWiseXls() throws JRException, IOException {
+        validateFinancialYear();
+        populateULBData();
+        inputStream = reportHelper.exportXls(inputStream, ULBWISEPATH, getParamMap(), budgetReportList);
+        return "ulb-XLS";
+    }
+
+    @Action(value = "/budget/budgetReport-generateULBWisePdf")
+    public String generateULBWisePdf() throws JRException, IOException {
+        validateFinancialYear();
+        populateULBData();
+        inputStream = reportHelper.exportPdf(inputStream, ULBWISEPATH, getParamMap(), budgetReportList);
+        return "ulb-PDF";
+    }
+
+    // --Author : Megha 03/04/2025
+
+	@ValidationErrorPage(value = "dept")
     @Action(value = "/budget/budgetReport-printDepartmentWiseReport")
     public String printDepartmentWiseReport() {
         try {
@@ -1245,7 +1395,19 @@ public class BudgetReportAction extends BaseFormAction {
         if (budgetReport.getFinancialYear() != null)
             budgetReport.setFinancialYear((CFinancialYear) getPersistenceService().find("from CFinancialYear where id=?",
                     budgetReport.getFinancialYear().getId()));
+        
     }
+    
+	/*
+	 * protected void validateUlb() {
+	 * 
+	 * if (budgetReport.getTenantId() == null) throw new
+	 * ValidationException(Arrays.asList( new
+	 * ValidationError("report.financialyear.not.selected",
+	 * "report.financialyear.not.selected")));
+	 * 
+	 * }
+	 */
 
     protected void validateFinancialYear() {
         if (budgetReport.getFinancialYear() == null || budgetReport.getFinancialYear().getId() == null)
@@ -1418,6 +1580,45 @@ public class BudgetReportAction extends BaseFormAction {
         final Map<String, BigDecimal> majorCodeToAmountMap = getMajorCodeToAmountMap(budgetDetails);
         final Map<String, BigDecimal> majorCodeToAppropriationAmountMap = getMajorCodeToAppropriationAmountMap(budgetDetails);
         final Map<String, String> referenceNo = getReferenceNumber("departmentWiseBudgetReport");
+        final String uniqueMajorCodesAsString = getUniqueMajorCodesAsString(majorCodeToAmountMap);
+        if ("".equals(uniqueMajorCodesAsString)) {
+            budgetReportList.add(new BudgetReportView("", "No records found", "", null, null, null));
+            return;
+        }
+        final List<CChartOfAccounts> chartOfAccounts = getPersistenceService().findAllBy(
+                "from CChartOfAccounts where glCode in (?)", uniqueMajorCodesAsString);
+        for (final CChartOfAccounts account : chartOfAccounts) {
+            final BigDecimal approved = majorCodeToAmountMap.get(account.getMajorCode());
+            final BigDecimal reApp = majorCodeToAppropriationAmountMap.get(account.getMajorCode());
+            if ("RE".equalsIgnoreCase(isBeRe) && !getConsiderReAppropriationAsSeperate())
+                budgetReportList.add(new BudgetReportView("", account.getMajorCode() + "-" + account.getName(), referenceNo
+                        .get(account.getMajorCode()), approved.add(reApp),
+                        BigDecimal.ZERO, approved.add(reApp)));
+            else
+                budgetReportList.add(new BudgetReportView("", account.getMajorCode() + "-" + account.getName(), referenceNo
+                        .get(account.getMajorCode()), approved,
+                        reApp, approved.add(reApp)));
+        }
+        if (!chartOfAccounts.isEmpty()) {
+            final BigDecimal majorCodeApprovedTotals = getMajorCodeTotals(majorCodeToAmountMap);
+            final BigDecimal majorCodeApproriationTotals = getMajorCodeApproriationTotals(majorCodeToAppropriationAmountMap);
+            if ("RE".equalsIgnoreCase(isBeRe) && !getConsiderReAppropriationAsSeperate())
+                budgetReportList.add(new BudgetReportView("", "Total", "", majorCodeApprovedTotals
+                        .add(majorCodeApproriationTotals), BigDecimal.ZERO,
+                        majorCodeApprovedTotals.add(majorCodeApproriationTotals)));
+            else
+                budgetReportList.add(new BudgetReportView("", "Total", "", majorCodeApprovedTotals, majorCodeApproriationTotals,
+                        majorCodeApprovedTotals
+                                .add(majorCodeApproriationTotals)));
+
+        }
+        addEmptyRow();
+    }
+    
+    void populateULBSummarySection(final List<BudgetDetail> budgetDetails, final String isBeRe) {
+        final Map<String, BigDecimal> majorCodeToAmountMap = getMajorCodeToAmountMap(budgetDetails);
+        final Map<String, BigDecimal> majorCodeToAppropriationAmountMap = getMajorCodeToAppropriationAmountMap(budgetDetails);
+        final Map<String, String> referenceNo = getReferenceNumber("ulbWiseBudgetReport");
         final String uniqueMajorCodesAsString = getUniqueMajorCodesAsString(majorCodeToAmountMap);
         if ("".equals(uniqueMajorCodesAsString)) {
             budgetReportList.add(new BudgetReportView("", "No records found", "", null, null, null));

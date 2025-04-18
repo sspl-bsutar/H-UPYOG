@@ -189,11 +189,11 @@ public class VoucherHelper {
 		} catch (final ParseException e) {
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Exception occured while parsing date" + e);
-        } /*
-           * catch (final Exception e) { LOGGER.error(e); throw new
-           * ApplicationRuntimeException("Error occured while executing search instrument query"
-           * ); }
-           */
+		} /*
+			 * catch (final Exception e) { LOGGER.error(e); throw new
+			 * ApplicationRuntimeException("Error occured while executing search instrument query"
+			 * ); }
+			 */
 		return queryMap;
 	}
 
@@ -245,9 +245,9 @@ public class VoucherHelper {
 	}
 
 	/**
-	 * Constructs the corresponding sequence name for an EG_NUMBERS record. E.g.
-	 * if vouchertype = "1/CJV/CGVN" and fiscalperiod name = "FP7", then it
-	 * returns "SQ_1_CJV_CGVN_FP7".
+	 * Constructs the corresponding sequence name for an EG_NUMBERS record. E.g. if
+	 * vouchertype = "1/CJV/CGVN" and fiscalperiod name = "FP7", then it returns
+	 * "SQ_1_CJV_CGVN_FP7".
 	 *
 	 * @param voucherType
 	 * @param fiscalPeriodName
@@ -258,7 +258,8 @@ public class VoucherHelper {
 				.append(fiscalPeriodName).toString();
 	}
 
-	public static Map<String, Map<String, Object>> getBillDateQuery(final String billDateFrom, final String billDateTo) {
+	public static Map<String, Map<String, Object>> getBillDateQuery(final String billDateFrom,
+			final String billDateTo) {
 		final StringBuilder numDateQuery = new StringBuilder();
 		final Map<String, Map<String, Object>> queryMap = new HashMap<>();
 		final Map<String, Object> params = new HashMap<>();
@@ -276,16 +277,15 @@ public class VoucherHelper {
 		} catch (final ParseException e) {
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Exception occured while parsing date" + e);
-        } /*
-           * catch (final Exception e) { LOGGER.error(e); throw new
-           * ApplicationRuntimeException("Error occured while executing search instrument query"
-           * ); }
-           */
+		} /*
+			 * catch (final Exception e) { LOGGER.error(e); throw new
+			 * ApplicationRuntimeException("Error occured while executing search instrument query"
+			 * ); }
+			 */
 		return queryMap;
 	}
 
-	public String getEg_Voucher(final String vouType, final String fiscalPeriodIdStr)
-			throws TaskFailedException {
+	public String getEg_Voucher(final String vouType, final String fiscalPeriodIdStr) throws TaskFailedException {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug(" In EGovernCommon :getEg_Voucher method ");
 		final Query query = persistenceService.getSession()
@@ -332,8 +332,8 @@ public class VoucherHelper {
 				LOGGER.info(" before transNumber................" + transNumber);
 			/*
 			 * if(vNumGenMode.equalsIgnoreCase("Auto")) transNumber =
-			 * cmImpl.getTransRunningNumber(fundId.toString(),voucherType,vDate,
-			 * conn); if(LOGGER.isInfoEnabled()) LOGGER.info(
+			 * cmImpl.getTransRunningNumber(fundId.toString(),voucherType,vDate, conn);
+			 * if(LOGGER.isInfoEnabled()) LOGGER.info(
 			 * "after transNumber..........................."+transNumber);
 			 */final String monthArr[] = vDate.split("/");
 			final String month = monthArr[1];
@@ -397,13 +397,13 @@ public class VoucherHelper {
 		}
 		return departmentList;
 	}
-	
-	public List<String> getVoucherNamesByType(String voucherType){
-	    Query query = this.persistenceService.getSession().createSQLQuery(
-	    		"select distinct(name) from voucherheader vh where vh.type = :type");
-	    query.setString("type", voucherType);
-	    List<String> list = query.list();
-	    return list;
+
+	public List<String> getVoucherNamesByType(String voucherType) {
+		Query query = this.persistenceService.getSession()
+				.createSQLQuery("select distinct(name) from voucherheader vh where vh.type = :type");
+		query.setString("type", voucherType);
+		List<String> list = query.list();
+		return list;
 	}
 
 	public static final List<String> VOUCHER_TYPES = new ArrayList<String>() {
@@ -417,6 +417,8 @@ public class VoucherHelper {
 			add(FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
 			add(FinancialConstants.STANDARD_VOUCHER_TYPE_RECEIPT);
 			add(FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL);
+			add(FinancialConstants.STANDARD_VOUCHER_TYPE_PT_RECEIPT);
+			add(FinancialConstants.STANDARD_VOUCHER_TYPE_PT_DEMAND);
 		}
 	};
 	public static final List<String> EXPENDITURE_TYPES = new ArrayList<String>() {
@@ -449,7 +451,7 @@ public class VoucherHelper {
 		}
 
 	};
-	
+
 	public static final List<String> PAYMENTVOUCHER_NAMES = new ArrayList<String>() {
 		/**
 		 *
@@ -514,7 +516,7 @@ public class VoucherHelper {
 			put(VOUCHER_TYPES.get(3), JOURNALVOUCHER_NAMES);
 		}
 	};
-	
+
 	public static final List<String> TNEB_REGIONS = new ArrayList<String>() {
 		/**
 		 *
@@ -530,14 +532,14 @@ public class VoucherHelper {
 		}
 
 	};
-	
+
 	public Map<String, List<String>> getVoucherNamesAndTypes() {
-	    Map<String,List<String>> voucherNamesTypes = new HashMap<>();
-	    voucherNamesTypes.put(VOUCHER_TYPES.get(0), getVoucherNamesByType(VOUCHER_TYPES.get(0)));
-	    voucherNamesTypes.put(VOUCHER_TYPES.get(1), getVoucherNamesByType(VOUCHER_TYPES.get(1)));
-	    voucherNamesTypes.put(VOUCHER_TYPES.get(2), getVoucherNamesByType(VOUCHER_TYPES.get(2)));
-	    voucherNamesTypes.put(VOUCHER_TYPES.get(3), getVoucherNamesByType(VOUCHER_TYPES.get(3)));
-	    return voucherNamesTypes;
+		Map<String, List<String>> voucherNamesTypes = new HashMap<>();
+		voucherNamesTypes.put(VOUCHER_TYPES.get(0), getVoucherNamesByType(VOUCHER_TYPES.get(0)));
+		voucherNamesTypes.put(VOUCHER_TYPES.get(1), getVoucherNamesByType(VOUCHER_TYPES.get(1)));
+		voucherNamesTypes.put(VOUCHER_TYPES.get(2), getVoucherNamesByType(VOUCHER_TYPES.get(2)));
+		voucherNamesTypes.put(VOUCHER_TYPES.get(3), getVoucherNamesByType(VOUCHER_TYPES.get(3)));
+		return voucherNamesTypes;
 	}
 
 	public EisCommonService getEisCommonService() {

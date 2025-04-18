@@ -590,6 +590,28 @@ function createDateFieldFormatter(tableType,prefix,suffix)
 	margin-bottom: 8px;
 	overflow: scroll;
 }
+
+        /* Style for the suggestion box */
+        .suggestionBox {
+            display: none;
+            position: absolute;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            max-height: 150px;
+            overflow-y: auto;
+            width: 200px;
+            z-index: 10;
+        }
+
+        .suggestionBox div {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .suggestionBox div:hover {
+            background-color: #ddd;
+        }
+     /* End Style for the suggestion box */
 </style>
 </head>
 <body>
@@ -601,63 +623,57 @@ function createDateFieldFormatter(tableType,prefix,suffix)
 				<div class="tabber">
 					<div class="tabbertab" id="loantab">
 						<h2>Loans</h2>
-						<span>
-							<div class="formmainbox">
+						
+							<div class="formmainbox">	</div>
 								<div class="subheadnew">Loan Header Register</div>
-							</div>
-							<div class="mandatory" align="center" style="display: none"
-								id="codeuniquecode">
+						
+							<div class="mandatory" align="center" style="display: none" id="codeuniquecode">
 								<s:text name="loangrant.subscheme.already.exists" />
 							</div>
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<jsp:include page="../report/loangrant/lgcommon.jsp" />
 								<tr>
-									<td class="bluebox">Bank<span class="mandatory">*</span></td>
-									<td class="bluebox"><egov:ajaxdropdown id="bank_branch"
-											fields="['Text','Value']" dropdownId="bank_branch"
-											url="voucher/common!ajaxLoadBankBranch.action" /> <s:select
-											name="bank_branch" id="bank_branch" list="bankBranchMap"
-											headerKey="-1" headerValue="----Choose----"
-											onchange="loadBankAccount(this)" value="%{bank_branch}" /></td>
-									<td class="bluebox">Bank Account<span class="mandatory">*</span></td>
-									<td class="bluebox"><egov:ajaxdropdown id="bankaccount"
-											fields="['Text','Value']" dropdownId="bankaccount"
-											url="voucher/common!ajaxLoadBankAccounts.action" /> <s:select
-											name="bankaccount" id="bankaccount"
-											list="dropdownData.bankaccountList" listKey="id"
-											listValue="chartofaccounts.glcode+'--'+accountnumber+'---'+accounttype"
-											onchange="checkIfFundIsSelected()" headerKey="-1"
-											headerValue="----Choose----" value="%{bankaccount}" /></td>
+									<td class="bluebox">Bank<span class="mandatory"></span></td>
+									<td class="bluebox">
+										<egov:ajaxdropdown id="bank_branch" fields="['Text','Value']" dropdownId="bank_branch" url="voucher/common-ajaxLoadBankBranch.action"/> 
+										<s:select name="bank_branch" id="bank_branch" 
+												  list="bankBranchMap" 
+												  headerKey="-1" 
+												  headerValue="---Choose---" 
+												  onchange="loadBankAccount(this)" 
+												  value="%{bank_branch}" />
+									</td>
+									<td class="bluebox">Bank Account<span class="mandatory"></span></td>
+									<td class="bluebox">
+									   <egov:ajaxdropdown id="bankaccount" fields="['Text','Value']" dropdownId="bankaccount" url="voucher/common-ajaxLoadBankAccounts.action" />
+									   <s:select name="bankaccount" id="bankaccount" 
+									             list="dropdownData.bankaccountList"
+									             listKey="id" 
+									             listValue="chartofaccounts.glcode+'--'+accountnumber+'---'+accounttype" 
+									             onchange="checkIfFundIsSelected();" 
+									             headerKey="-1" headerValue="----Choose----" 
+									             value="%{bankaccount}" />
+									</td>
 								</tr>
 								<tr>
-									<td class="greybox"><s:text
-											name="masters.loangrant.councilresolutionnumber" /><span
-										class="mandatory">*</span></td>
-									<td class="greybox"><s:textfield id="councilResNo"
-											name="councilResNo" /></td>
-									<td class="greybox"><s:text
-											name="masters.loangrant.councilresolutiondate" /><span
-										class="mandatory">*</span></td>
-									<td class="greybox"><s:date var="councilResDateId"
-											name="councilResDate" format='dd/MM/yyyy' /> <s:textfield
-											name="councilResDate" id="councilResDate"
-											onkeyup="DateFormat(this,this.value,event,false,'3');"
-											onblur="checkDateLG(this);" value="%{councilResDateId}" /> <a
-										tabindex="-1"
-										href="javascript:show_calendar('forms[0].councilResDate');"
-										style="text-decoration: none">&nbsp;<img
-											src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>
+									<td class="greybox"><s:text name="masters.loangrant.councilresolutionnumber" /><span class="mandatory"></span></td>
+									<td class="greybox"><s:textfield id="councilResNo"	name="councilResNo" /></td>
+									<td class="greybox"><s:text	name="masters.loangrant.councilresolutiondate" /><span	class="mandatory"></span></td>
+									<td class="greybox"><s:date var="councilResDateId"	name="councilResDate" format='dd/MM/yyyy' /> 
+									    <s:textfield name="councilResDate" id="councilResDate"	onkeyup="DateFormat(this,this.value,event,false,'3');"	onblur="checkDateLG(this);" value="%{councilResDateId}" /> 
+									    <a tabindex="-1" href="javascript:show_calendar('forms[0].councilResDate');" style="text-decoration: none">&nbsp;
+									    <img src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /> </a>
 									</td>
 								</tr>
 								<tr>
 									<td class="bluebox"><s:text
 											name="masters.loangrant.governmentordernumber" /><span
-										class="mandatory">*</span></td>
+										class="mandatory"></span></td>
 									<td class="bluebox"><s:textfield id="govtOrderNo"
 											name="govtOrderNo" /></td>
 									<td class="bluebox"><s:text
 											name="masters.loangrant.governmentorderdate" /><span
-										class="mandatory">*</span></td>
+										class="mandatory"></span></td>
 									<td class="bluebox"><s:date var="govtOrderDateId"
 											name="govtOrderDate" format='dd/MM/yyyy' /> <s:textfield
 											name="govtOrderDate" id="govtOrderDate"
@@ -665,79 +681,76 @@ function createDateFieldFormatter(tableType,prefix,suffix)
 											onblur="checkDateLG(this);" value="%{govtOrderDateId}" /> <a
 										tabindex="-1"
 										href="javascript:show_calendar('forms[0].govtOrderDate');"
-										style="text-decoration: none">&nbsp;<img
-											src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>
+										style="text-decoration: none">&nbsp;
+										<img src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>
 									</td>
 								</tr>
 								<tr>
-									<td class="greybox"><s:text
-											name="masters.loangrant.amendmentnumber" /><span
-										class="mandatory">*</span></td>
-									<td class="greybox"><s:textfield id="amendmentNo"
-											name="amendmentNo" /></td>
-									<td class="greybox"><s:text
-											name="masters.loangrant.amendmentdate" /><span
-										class="mandatory">*</span></td>
-									<td class="greybox"><s:date var="amendmentDateId"
-											name="amendmentDate" format='dd/MM/yyyy' /> <s:textfield
-											name="amendmentDate" id="amendmentDate"
-											onkeyup="DateFormat(this,this.value,event,false,'3');"
-											onblur="checkDateLG(this);" value="%{amendmentDateId}" /> <a
-										tabindex="-1"
-										href="javascript:show_calendar('forms[0].amendmentDate');"
-										style="text-decoration: none">&nbsp;<img
-											src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>
+									<td class="greybox"><s:text	name="masters.loangrant.amendmentnumber" /><span class="mandatory"></span></td>
+									<td class="greybox"><s:textfield id="amendmentNo" name="amendmentNo" /></td>
+									<td class="greybox"><s:text name="masters.loangrant.amendmentdate" /><span	class="mandatory"></span></td>
+									<td class="greybox">
+									    <s:date var="amendmentDateId" name="amendmentDate" format='dd/MM/yyyy'/> 
+									    <s:textfield name="amendmentDate" id="amendmentDate" onkeyup="DateFormat(this,this.value,event,false,'3');"	onblur="checkDateLG(this);" value="%{amendmentDateId}" /> 
+									    <a tabindex="-1" href="javascript:show_calendar('forms[0].amendmentDate');"	style="text-decoration: none">
+									       &nbsp;<img src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>
 									</td>
 								</tr>
 							</table>
-							<div style="background-color: #FFFFFF; height: 24px">&nbsp</div>
+							<div style="background-color: #FFFFFF; height: 24px">&nbsp;</div>
 							<div class="yui-skin-sam" align="center">
 								<div id="projectCodeTable"></div>
-							</div> <script>
-		    makeProjectDetailTable();
-			document.getElementById('projectCodeTable').getElementsByTagName('table')[0].width="80%";
-		 </script>
-							<div style="background-color: #F7F7F7; height: 24px">&nbsp</div>
+							</div> 
+					<script>
+					       makeProjectDetailTable();
+						   document.getElementById('projectCodeTable').getElementsByTagName('table')[0].width="80%";
+					 </script>
+						<div style="background-color: #F7F7F7; height: 24px">&nbsp;</div>
 							<table>
 								<tr>
 									<td colspan="4">
-										<table>
-											<td class="bluebox"><s:text
-													name="masters.loangrant.projectcost" /><span
-												class="mandatory">*</span></td>
-											<td class="bluebox"><s:textfield id="projectCost"
-													name="projectCost" style='text-align:right;' maxlength="20"
-													onblur='validateDigitsAndDecimal(this);calculateAllPercentages();updateAllTotalAmounts()' /></td>
-											<td class="bluebox"><s:text
-													name="masters.loangrant.sanctionedcost" /><span
-												class="mandatory">*</span></td>
-											<td class="bluebox"><s:textfield id="sanctionedCost"
+										<table><tr>
+											<td class="bluebox">
+												<s:text	name="masters.loangrant.projectcost" /><span class="mandatory"></span>
+											</td>
+											<td class="bluebox">
+											  <s:textfield id="projectCost" name="projectCost" style='text-align:right;' maxlength="20"	onblur='validateDigitsAndDecimal(this);calculateAllPercentages();updateAllTotalAmounts()'/>
+											 </td>
+											<td class="bluebox">
+											   <s:text	name="masters.loangrant.sanctionedcost" /><span	class="mandatory"></span>
+											 </td>
+											<td class="bluebox">
+												<s:textfield id="sanctionedCost"
 													name="sanctionedCost" style='text-align:right;'
 													maxlength="20"
-													onblur='validateDigitsAndDecimal(this);validateAmounts(this);' /></td>
-											<td class="bluebox"><s:text
-													name="masters.loangrant.revisedcost" /></td>
+													onblur='validateDigitsAndDecimal(this);validateAmounts(this);' />
+											</td>
+											<td class="bluebox">
+											  <s:text name="masters.loangrant.revisedcost" />
+											</td>
 											<td class="bluebox"><s:textfield id="revisedCost"
 													name="revisedCost" style='text-align:right;' maxlength="20"
-													onblur='validateDigitsAndDecimal(this);validateAmounts(this);emptyRevisedCostIfZero(this);calculateAllPercentages();updateAllTotalAmounts()' /></td>
-											<td class="bluebox">&nbsp&nbsp&nbsp(Amounts in Lacs)</td>
+													onblur='validateDigitsAndDecimal(this);validateAmounts(this);emptyRevisedCostIfZero(this);calculateAllPercentages();updateAllTotalAmounts()' />
+											</td>
+											<td class="bluebox">&nbsp;&nbsp;&nbsp;(Amounts in Lacs)</td>
+											</tr>
 										</table>
 									</td>
 								</tr>
 							</table>
 							<div style="background-color: #F7F7F7; height: 24px">&nbsp</div>
 							<div class="formmainbox">
-								<div class="subheadnew">Funding pattern for the sanctioned
-									amount</div>
+								<div class="subheadnew">Funding pattern for the sanctioned amount</div>
 							</div>
 							<div class="yui-skin-sam" align="center">
 								<div id="sanctionedAmountTable"></div>
-							</div> <script>
-		    makeSanctionedAmountTable();
-			document.getElementById('sanctionedAmountTable').getElementsByTagName('table')[0].width="100%";
-		 </script>
+							</div>
+							 <script>
+							    makeSanctionedAmountTable();
+								document.getElementById('sanctionedAmountTable').getElementsByTagName('table')[0].width="100%";
+							 </script>
 							<div id="codescontainer"></div>
-						</span>
+						
 						<div align="center" class="buttonbottom">
 							<s:submit method="save" value="Submit"
 								onclick="return validateInputs();" cssClass="buttonsubmit" />
@@ -749,8 +762,7 @@ function createDateFieldFormatter(tableType,prefix,suffix)
 					<div class="tabbertab" id="receipttab">
 						<h2>Unsanctioned Amount</h2>
 						<div class="formmainbox">
-							<div class="subheadnew">Funding pattern for the
-								unsanctioned amount</div>
+							<div class="subheadnew">Funding pattern for the	unsanctioned amount</div>
 						</div>
 						<div class="yui-skin-sam" align="center">
 							<div id="unsanctionedAmountTable"></div>
@@ -763,8 +775,7 @@ function createDateFieldFormatter(tableType,prefix,suffix)
 					<div class="tabbertab" id="receipttab">
 						<h2>Revised Amount</h2>
 						<div class="formmainbox">
-							<div class="subheadnew">Funding pattern for the revised
-								amount</div>
+							<div class="subheadnew">Funding pattern for the revised	amount</div>
 						</div>
 						<div class="yui-skin-sam" align="left">
 							<div id="revisedAmountTable"></div>
@@ -801,7 +812,9 @@ function createDateFieldFormatter(tableType,prefix,suffix)
 		}
 		var x=	obj.options[obj.selectedIndex].value;	
 		if(x!=-1)
+			{
 			populatebankaccount({branchId:x,fundId:fundIdValue});
+		  }
 	}
 	function checkIfFundIsSelected()
 	{
@@ -816,10 +829,10 @@ function createDateFieldFormatter(tableType,prefix,suffix)
 	}
   	</script>
 			<s:token />
-		</s:push>
+		   </s:push>
 	</s:form>
 	<script>
-  	loadChanges(document.getElementById('fundId'));
-  </script>
+  	   loadChanges(document.getElementById('fundId'));
+    </script>
 </body>
 </html>

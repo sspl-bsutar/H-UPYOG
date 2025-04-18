@@ -50,7 +50,9 @@ package org.egov.egf.masters.services;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -66,9 +68,11 @@ import org.egov.commons.Accountdetailkey;
 import org.egov.commons.service.AccountDetailKeyService;
 import org.egov.commons.service.AccountdetailtypeService;
 import org.egov.commons.service.EntityTypeService;
+import org.egov.egf.masters.repository.ContractorRepository;
 import org.egov.egf.masters.repository.SupplierRepository;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.validation.exception.ValidationException;
+import org.egov.model.masters.Contractor;
 import org.egov.model.masters.Supplier;
 import org.egov.model.masters.SupplierSearchRequest;
 import org.hibernate.Session;
@@ -86,6 +90,9 @@ public class SupplierService implements EntityTypeService {
 
 	@Autowired
 	private SupplierRepository supplierRepository;
+	
+	@Autowired
+	private ContractorRepository contractorRepository;
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -201,4 +208,48 @@ public class SupplierService implements EntityTypeService {
 			throws ValidationException {
 		return Collections.emptyList();
 	}
+	
+	@Transactional
+	public String fetchLastId() {
+		
+	    Long lastId =  supplierRepository.findMaxId()+1;
+	    String supCode;
+	    if(lastId != null) {
+	    	if(lastId < 1000) 
+	    		supCode = "Sup/001/"+String.format("%04d", lastId);
+	    	else
+	    		supCode = "Sup/001/"+lastId;
+	    }
+	    else
+	    	supCode = "Sup/001/0001";
+	    return  supCode;
+	}
+	
+	// Adding drop down for detail code By Harsh
+	
+	 public List<Map<String, String>> getAllSuppliersAndContractors() {
+	        List<Map<String, String>> dropdownList = new ArrayList<>();
+
+	        // Fetch Suppliers
+	        List<Supplier> suppliers = supplierRepository.findAll();
+	        for (Supplier supplier : suppliers) {
+	            Map<String, String> item = new HashMap<>();
+	            item.put("name", supplier.getName());
+	            dropdownList.add(item);
+	        }
+
+	        // Fetch Contractors
+	        List<Contractor> contractors = contractorRepository.findAll();
+	        for (Contractor contractor : contractors) {
+	            Map<String, String> item = new HashMap<>();
+	            item.put("name", contractor.getName());
+	            dropdownList.add(item);
+	        }
+
+	        return dropdownList;
+	    }
+	
+	
+	
+	
 }

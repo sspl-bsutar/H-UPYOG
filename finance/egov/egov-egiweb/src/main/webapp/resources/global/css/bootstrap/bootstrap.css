@@ -12,6 +12,102 @@ html {
 body {
   margin: 0;
 }
+
+
+.input {
+        background-color: #fff;
+        border-radius: 8px;
+        border: 0;
+        box-sizing: border-box;
+        color: #333;
+        font-size: 15px;
+        height: 45px;
+        outline: 0;
+        padding: 4px 20px 0;
+        width: 100%;
+        border: forestgreen solid 1px;
+    }
+
+.input:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+          background-color: #fff;
+}
+
+
+    .input2 {
+        background-color: #f8f8f8;
+        border-radius: 8px;
+        border: 0;
+        box-sizing: border-box;
+        color: #333;
+        font-size: 15px;
+        height: 35px;
+        outline: 0;
+        padding: 4px 5px 0;
+        width: 100%;
+        border: #a3a3a3 solid 1px;
+    }
+
+    .cut {
+        background-color: #fff;
+        border-radius: 10px;
+        height: 20px;
+        left: 20px;
+        position: absolute;
+        top: -150px;
+        transform: translateY(0);
+        transition: transform 200ms;
+        width: auto;
+        text-align: center;
+    }
+
+    .cut-short {
+        width: 50px;
+    }
+
+    .input:focus~.cut,
+    .input:not(:placeholder-shown)~.cut {
+        transform: translateY(8px);
+    }
+
+    .placeholder {
+        color: #65657b;
+        font-family: sans-serif;
+        left: 27px;
+        line-height: 14px;
+        pointer-events: none;
+        position: absolute;
+        transform-origin: 0 50%;
+        transition: transform 200ms, color 200ms;
+        top: -8px;
+        font-size: 16px;
+        padding: 2px;
+        background: #f8f8f8;
+        border-radius: 10px;
+    }
+
+  
+
+    .input:not(:placeholder-shown)~.placeholder {
+        color: #333333;
+    }
+
+    .input:focus~.placeholder {
+        color: #dc2f55;
+    }
+
+
+label {
+  display: block !important;
+  margin-bottom: 5px !important;
+  color: #333333 !important;
+}
+
+
+
 article,
 aside,
 details,
@@ -2556,7 +2652,7 @@ output {
   color: #555;
   background-color: #fff;
   background-image: none;
-  border: 1px solid #ccc;
+  border: 1px solid forestgreen;
   border-radius: 4px;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
           box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
@@ -2981,7 +3077,7 @@ select[multiple].input-lg {
 @media (min-width: 768px) {
   .form-horizontal .control-label {
     padding-top: 7px;
-    margin-bottom: 0;
+ 
     text-align: right;
   }
 }
@@ -3059,7 +3155,9 @@ fieldset[disabled] a.btn {
 .btn-default {
   color: #333;
   background-color: #fff;
-  border-color: #ccc;
+  border-color: forestgreen;
+    font-weight: bold;
+    color: forestgreen;
 }
 .btn-default:focus,
 .btn-default.focus {
@@ -5463,6 +5561,9 @@ button.list-group-item-danger.active:focus {
   border-bottom: 1px solid transparent;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
+  border-left: 5px solid #333;
+  margin-bottom: 32px;
+  
 }
 .panel-heading > .dropdown .dropdown-toggle {
   color: inherit;

@@ -122,6 +122,7 @@ public class BudgetLoadAction extends BaseFormAction {
     private static final int REAMOUNT_CELL_INDEX = 4;
     private static final int BEAMOUNT_CELL_INDEX = 5;
     private static final int PLANNINGPERCENTAGE_CELL_INDEX = 6;
+    private static final int TENANT_ID = 7;
     private boolean errorInMasterData = false;
     private boolean isBudgetUploadFileEmpty = true;
     private MultipartFile[] originalFile = new MultipartFile[1];
@@ -305,7 +306,7 @@ public class BudgetLoadAction extends BaseFormAction {
             for (int i = DATA_STARTING_ROW_INDEX; i <= sheet.getLastRowNum(); i++) {
                 HSSFRow errorRow = sheet.getRow(i);
                 if(!isRowEmpty(errorRow)){
-                    HSSFCell errorCell = errorRow.createCell(7);
+                    HSSFCell errorCell = errorRow.createCell(8);
                     String fundCode = getStrValue(sheet.getRow(i).getCell(FUNDCODE_CELL_INDEX));
                     fundCode = fundCode != null ? fundCode : "";
                     String funcCode = getStrValue(sheet.getRow(i).getCell(FUNCTIONCODE_CELL_INDEX));
@@ -379,7 +380,7 @@ public class BudgetLoadAction extends BaseFormAction {
 
             for (int i = DATA_STARTING_ROW_INDEX; i <= sheet.getLastRowNum(); i++) {
                 HSSFRow finalStatusRow = sheet.getRow(i);
-                HSSFCell finalStatusCell = finalStatusRow.createCell(7);
+                HSSFCell finalStatusCell = finalStatusRow.createCell(8);
                 finalStatusCell.setCellValue(finalStatusMap.get((getStrValue(sheet.getRow(i).getCell(FUNDCODE_CELL_INDEX)) + "-"
                         + getStrValue(sheet.getRow(i).getCell(FUNCTIONCODE_CELL_INDEX)) + "-"
                         + getStrValue(sheet.getRow(i).getCell(DEPARTMENTCODE_CELL_INDEX)) + "-" + getStrValue(sheet.getRow(i)
@@ -487,6 +488,7 @@ public class BudgetLoadAction extends BaseFormAction {
                 
                 if(budget.getReAmount() != null && budget.getReAmount().compareTo(new BigDecimal(0)) == 0)
                     error = error + " " + getText("error.while.checking.re.value");
+                
                 
                 budget.setErrorReason(error);
                 if (!error.equalsIgnoreCase("")) {
@@ -597,6 +599,7 @@ public class BudgetLoadAction extends BaseFormAction {
                         : getStrValue(row.getCell(BEAMOUNT_CELL_INDEX)))));
                 budget.setPlanningPercentage(getNumericValue(row.getCell(PLANNINGPERCENTAGE_CELL_INDEX)) == null ? 0
                         : getNumericValue(row.getCell(PLANNINGPERCENTAGE_CELL_INDEX)).longValue());
+                budget.setTenantId(getStrValue(row.getCell(TENANT_ID)) == null ? "" : getStrValue(row.getCell(TENANT_ID)));
             }
         } catch (final ValidationException e)
         {
@@ -636,11 +639,7 @@ public class BudgetLoadAction extends BaseFormAction {
            */
     }
 
-    @Override
-    public void validate()
-    {
-
-    }
+   
 
     private String getStrValue(final HSSFCell cell) {
         if (cell == null && cell.getCellType() == HSSFCell.CELL_TYPE_BLANK)

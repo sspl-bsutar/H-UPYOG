@@ -55,6 +55,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.measure.unit.Dimension.Model;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
@@ -70,6 +72,7 @@ import org.egov.commons.CGeneralLedgerDetail;
 import org.egov.commons.EgfAccountcodePurpose;
 import org.egov.commons.dao.ChartOfAccountsHibernateDAO;
 import org.egov.commons.service.AccountdetailtypeService;
+import org.egov.egf.masters.services.SupplierService;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.utils.DateUtils;
 import org.egov.infra.validation.exception.ValidationError;
@@ -86,10 +89,12 @@ import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.exilant.GLEngine.ChartOfAccounts;
 import com.exilant.GLEngine.CoaCache;
 import com.mchange.v1.cachedstore.CacheFlushException;
+import com.opensymphony.xwork2.ActionContext;
 
 @ParentPackage("egov")
 @Results({
@@ -152,6 +157,9 @@ public class ChartOfAccountsAction extends BaseFormAction {
     
     @Autowired
     private AccountdetailtypeService accountdetailtypeService;
+    
+    @Autowired
+    private SupplierService supplierService;
 
     @Override
     public Object getModel() {
@@ -277,14 +285,13 @@ public class ChartOfAccountsAction extends BaseFormAction {
             populateAccountCodePurpose();
     		return EDIT;
     	}
+        setPurposeOnCoa();
         updateOnly = true;
         populateAccountDetailType();
         model.setIsActiveForPosting(activeForPosting);
         model.setFunctionReqd(functionRequired);
         model.setBudgetCheckReq(budgetCheckRequired);
         dropdownData.put("mappedAccountDetailTypeList", accountDetailType);
-        setPurposeOnCoa();
-        populateAccountCodePurpose();
         chartOfAccountsService.persist(model);
         saveCoaDetails(model);
         populateAccountDetailTypeList();
@@ -667,8 +674,12 @@ public class ChartOfAccountsAction extends BaseFormAction {
     public String addNew(){
         populateCodeLength();
         model = new CChartOfAccounts();
+        List<Map<String, String>> dropdownList = supplierService.getAllSuppliersAndContractors();
+        ActionContext.getContext().getValueStack().set("dropdownList", dropdownList);
+       
         return "detailed";
     }
+
 
     @Action(value = "/masters/chartOfAccounts-create")
     public String create() {
@@ -702,7 +713,6 @@ public class ChartOfAccountsAction extends BaseFormAction {
             model.setGlcode(generatedGlcode.concat(newGlcode));
             model.setMajorCode(model.getGlcode().substring(0, majorCodeLength));
             setPurposeOnCoa();
-            populateAccountCodePurpose();
             model.setIsActiveForPosting(activeForPosting);
             populateAccountDetailType();
             chartOfAccountsService.persist(model);

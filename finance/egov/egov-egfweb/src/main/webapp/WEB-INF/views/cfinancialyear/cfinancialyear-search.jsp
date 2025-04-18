@@ -53,19 +53,17 @@
 <form:form role="form" action="search" modelAttribute="CFinancialYearSearchRequest"
 	id="cFinancialYearsearchform"
 	cssClass="form-horizontal form-groups-bordered"
-	enctype="multipart/form-data">
+	enctype="multipart/form-data" >
 	<div class="main-content">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
-						<div class="panel-title"><spring:message
-									code="lbl.search.finacial.year" /></div>
+						<div class="panel-title"><spring:message code="lbl.search.finacial.year" /></div>
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-5 control-label text-right"><spring:message
-									code="lbl.finyearrange" /> </label>
+							<label class="col-sm-5 control-label text-right"><spring:message code="lbl.finyearrange" /> </label>
 							<div class="col-sm-3 add-margin">
 								<form:select path="finYearRange" id="finYearRange"
 									class="form-control">
@@ -76,8 +74,30 @@
 										itemLabel="finYearRange" />
 								</form:select>
 								<form:errors path="finYearRange" cssClass="error-msg" />
-							</div>
+							</div>											
 						</div>
+						<!-- code added by raju  start date range-->
+						<div class="form-group">
+						    <label class="col-sm-5 control-label text-right">
+						        <spring:message code="lbl.start.date" />
+						    </label>
+						     <div class="col-sm-3 add-margin">
+                                <form:input path="startingDate" id="startDate" class="form-control datepicker" data-date-end-date="0d" data-inputmask="'mask': 'd/m/y'"  />
+                                <form:errors path="startingDate" cssClass="error-msg" />
+                            </div>
+						</div>
+						
+						<div class="form-group">
+						    <label class="col-sm-5 control-label text-right">
+						        <spring:message code="lbl.end.date" />
+						    </label>
+						    <div class="col-sm-3 add-margin">
+                                <form:input path="endingDate" id="endDate" class="form-control datepicker" data-date-end-date="0d" data-inputmask="'mask': 'd/m/y'" onchange="validateEndDate()" />
+                                <form:errors path="endingDate" cssClass="error-msg" />
+                            </div>
+						</div>
+						<!-- date Range ended -->
+						
 						<input type="hidden" id="mode" name="mode" value="${mode}" />
 						<div class="form-group">
 							<div class="text-center">
@@ -88,7 +108,7 @@
 									onclick="window.parent.postMessage('close','*');window.close();"><spring:message code='lbl.close' /></a>
 							</div>
 						</div>
-
+						</div>
 					</div>
 				</div>
 			</div>
@@ -113,13 +133,59 @@
 	</div>
 </div>
 <script>
+
+	
 	$('#btnsearch').click(function(e) {
 		if ($('form').valid()) {
 		} else {
 			e.preventDefault();
 		}
+
+		  // Validate that Start Date is not greater than End Date
+	    function validateEndDate() {
+	        let startDateStr = document.getElementById('startDate').value;
+	        let endDateStr = document.getElementById('endDate').value;
+
+	        if (startDateStr && endDateStr) {
+	            let start = parseDate(startDateStr);
+	            let end = parseDate(endDateStr);
+
+	            if (start > end) {
+	                bootbox.alert("Start Date cannot be greater than End Date.");
+	                document.getElementById('endDate').value = '';
+	                document.getElementById('endDate').focus();
+	                return false;
+	            }
+	        }
+	        return true;
+	    }
+
+	    // Convert "dd/mm/yyyy" string to a Date object
+	    function parseDate(dateStr) {
+	        let parts = dateStr.split('/');
+	        return new Date(parts[2], parts[1] - 1, parts[0]); // Year, Month (0-based), Day
+	    }
+
+	  
+	    // Auto-clear financial year when date fields are selected
+// 	    $('#startDate, #endDate').change(function () {
+     
+ 		$('#startDate').change(function () {
+
+     		clearFinancialYear();
+	        validateEndDate(); // Ensure validation on date change
+	    });
+
+	    function clearFinancialYear() {
+	        if ($('#startDate').val() || $('#endDate').val()) {
+	            $('#finYearRange').val('');
+	        }
+	    }
 	});
-</script>
+ 
+	</script>
+		    
+
 <link rel="stylesheet"
 	href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/jquery.dataTables.min.css' context='/services/egi'/>" />
 <link rel="stylesheet"

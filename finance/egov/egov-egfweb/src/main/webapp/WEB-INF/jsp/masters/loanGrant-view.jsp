@@ -652,7 +652,7 @@ var makeReceiptTable = function() {
 									<td class="bluebox">Bank<span class="mandatory">*</span></td>
 									<td class="bluebox"><egov:ajaxdropdown id="bank_branch"
 											fields="['Text','Value']" dropdownId="bank_branch"
-											url="voucher/common!ajaxLoadBankBranch.action" /> <s:select
+											url="voucher/common-ajaxLoadBankBranch.action" /> <s:select
 											name="bank_branch" id="bank_branch"
 											listValue="%{bank.name+'-'+branchname}" listKey="id"
 											list="dropdownData.bankbranchList" headerKey="-1"
@@ -661,7 +661,7 @@ var makeReceiptTable = function() {
 									<td class="bluebox">Bank Account<span class="mandatory">*</span></td>
 									<td class="bluebox"><egov:ajaxdropdown id="bankaccount"
 											fields="['Text','Value']" dropdownId="bankaccount"
-											url="voucher/common!ajaxLoadBankAccounts.action" /> <s:select
+											url="voucher/common-ajaxLoadBankAccounts.action" /> <s:select
 											name="bankaccount" id="bankaccount"
 											list="dropdownData.bankaccountList" listKey="id"
 											listValue="chartofaccounts.glcode+'--'+accountnumber+'---'+accounttype"

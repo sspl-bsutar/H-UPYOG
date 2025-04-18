@@ -189,7 +189,7 @@ public class OpeningBalanceReportAction extends BaseFormAction {
 		}
 		if (checkNullandEmpty(openingBalanceReport.getObFund_id())) {
 			fund = (Fund) persistenceService.find("from Fund where id = ?",
-					Integer.parseInt(openingBalanceReport.getObFund_id()));
+					Long.parseLong(openingBalanceReport.getObFund_id()));  // changed by raju integer to long parsing
 			heading = heading + " under " + fund.getName();
 		}
 		if (checkNullandEmpty(openingBalanceReport.getDeptId())) {

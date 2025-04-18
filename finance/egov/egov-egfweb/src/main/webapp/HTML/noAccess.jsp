@@ -71,6 +71,7 @@
 				</tr>
 			</tbody>
 		</table>
-	<%@ include file = "/../egovfooter.html" %>
+	<%-- <%@ include file = "/../egovfooter.html" %> --%>
+	<%-- <%@ include file = "/egov-egfweb/src/main/webapp/egovfooter.html" %> --%>
 	</body>
 </html>

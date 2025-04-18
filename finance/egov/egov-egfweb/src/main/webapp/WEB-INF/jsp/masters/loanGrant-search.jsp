@@ -150,7 +150,7 @@
 						onBlur="splitSubSchemeCode(this);checkuniquenesscode();" /> <egov:uniquecheck
 						id="codeuniquecode" name="codeuniquecode"
 						fieldtoreset="subSchemeId" fields="['Value']"
-						url='masters/loanGrant!codeUniqueCheckCode.action' /></td>
+						url='masters/loanGrant-codeUniqueCheckCode.action' /></td>
 			</tr>
 			<s:hidden name="mode" />
 		</table>
@@ -219,12 +219,12 @@
    var windowName="";
      if(mode=='edit')
       {
-      		url = "loanGrant!beforeEdit.action?model.id="+id;
+      		url = "loanGrant-beforeEdit.action?model.id="+id;
             windowName="LoangrantEdit";
       }
       else
       {
-      url = "loanGrant!beforeView.action?model.id="+id;
+      url = "loanGrant-beforeView.action?model.id="+id;
       windowName="LoangrantView";
       }
 	 window.open(url,windowName,'resizable=yes,scrollbars=yes,left=300,top=40, width=900, height=700');
@@ -246,7 +246,7 @@
 }
 function autocompleteSchemeBy20LG()
 {
-	     oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common!ajaxLoadSchemeBy20.action", [ "~^"]);
+	     oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common-ajaxLoadSchemeBy20.action", [ "~^"]);
 	   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 	   oACDS.scriptQueryParam = "startsWith";
 	  
@@ -276,7 +276,7 @@ function autocompleteSchemeBy20LG()
 }
 function autocompleteSubSchemeBy20LG()
 {
-	   oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common!ajaxLoadSubSchemeBy20.action", [ "~^"]);
+	   oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common-ajaxLoadSubSchemeBy20.action", [ "~^"]);
 	   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 	   oACDS.scriptQueryParam = "startsWith";
 	   var oAutoComp1 = new YAHOO.widget.AutoComplete('subScheme.name','codescontainer',oACDS);

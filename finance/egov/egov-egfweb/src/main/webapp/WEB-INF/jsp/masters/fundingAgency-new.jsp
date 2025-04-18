@@ -91,7 +91,7 @@
 								id="code" name="code" onblur="checkuniquenesscode();" /></td>
 						<egov:uniquecheck id="codeuniquecode" name="codeuniquecode"
 							fieldtoreset="code" fields="['Value']"
-							url='masters/fundingAgency!codeUniqueCheckCode.action' />
+							url='masters/fundingAgencycodeUniqueCheckCode.action' />
 					</tr>
 					<tr>
 						<td class="bluebox" width="10%">Name<span class="mandatory">*</span></td>

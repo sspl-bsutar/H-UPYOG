@@ -233,9 +233,9 @@ public class RemittanceStatementReportAction extends ReportFormAction {
         critParams.put(EGOV_BANK_ACCOUNT, bankAccount);
         critParams.put(EGOV_REMITTANCE_DATE, remittanceDate == null ? new Date() : remittanceDate);
         critParams.put(CollectionConstants.LOGO_PATH, cityService.getCityLogoAsStream());
-        bankRemittanceList = (List<CollectionBankRemittanceReport>) getSession().get("REMITTANCE_LIST");
-        critParams.put(EGOV_REMITTANCE_VOUCHER,
-                bankRemittanceList.isEmpty() ? "" : bankRemittanceList.get(0).getVoucherNumber());
+//        bankRemittanceList = (List<CollectionBankRemittanceReport>) getSession().get("REMITTANCE_LIST");
+//        critParams.put(EGOV_REMITTANCE_VOUCHER,
+//                bankRemittanceList.isEmpty() ? "" : bankRemittanceList.get(0).getVoucherNumber());
         critParams.put(CollectionConstants.LOGO_PATH, cityService.getCityLogoAsStream());
     }
     @SuppressWarnings("unchecked")

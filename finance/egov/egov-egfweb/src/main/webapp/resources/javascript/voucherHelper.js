@@ -2276,7 +2276,7 @@ function autocompleteSchemeBy20()
 
 	
 }
-function autocompleteSubSchemeBy20  ()
+function autocompleteSubSchemeBy20()
 {
 		path="../..";
 	   oACDS = new YAHOO.widget.DS_XHR(path+"/voucher/common-ajaxLoadSubSchemeBy20.action", [ "~^"]);

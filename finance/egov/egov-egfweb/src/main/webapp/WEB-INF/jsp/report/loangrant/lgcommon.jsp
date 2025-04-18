@@ -46,117 +46,238 @@
   ~
   --%>
 
-
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <%@ taglib prefix="s" uri="/WEB-INF/tags/struts-tags.tld"%>
+  <%@ taglib prefix="st" uri="/struts-tags" %>
 <%@ taglib prefix="egov" tagdir="/WEB-INF/tags"%>
+<style>
+.input-container {
+    position: relative;
+    width: 70%;
+}
+
+.suggestions-box {
+    max-height: 150px;
+    overflow-y: auto;
+    border-top: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    z-index: 9999;
+}
+
+.suggestions-box1 {
+    max-height: 150px;
+    overflow-y: auto;
+    border-top: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    z-index: 9999;
+}
+.suggestion-item {
+    padding: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+
+</style>
+
+
+
 <tr>
-	<td class="bluebox"><s:text name="masters.subscheme.search.fund" />
-		<s:if test="%{defaultFundId==-1}">
-			<span class="mandatory">*</span>
-		</s:if></td>
-	<td class="bluebox"><s:select name="fundId" id="fundId"
-			list="dropdownData.fundList" listKey="id" listValue="name"
-			headerKey="-1" headerValue="----Choose----"
-			onchange="loadChanges(this)" value="%{fundId.id}" /></td>
-	<s:if test="%{defaultFundId!=-1}">
-		<script>
-		document.getElementById("fundId").value='<s:property value="defaultFundId"/>';
-		</script>
-	</s:if>
+    <td class="bluebox"><s:text name="masters.subscheme.search.fund" />
+        <s:if test="%{defaultFundId==-1}">
+            <span class="mandatory"></span>
+        </s:if></td>
+    <td class="bluebox">
+        <s:select name="fundId" id="fundId"
+                  list="dropdownData.fundList" listKey="id" listValue="name"
+                  headerKey="-1" headerValue="----Choose----"
+                  onchange="loadChanges(this)" value="%{fundId.id}" />
+    </td>
+    <s:if test="%{defaultFundId!=-1}">
+        <script>
+            document.getElementById("fundId").value = '<s:property value="defaultFundId"/>';
+        </script>
+    </s:if>
 </tr>
+
 <tr>
-	<td class="greybox"><s:text name="masters.subscheme.search.scheme" /><span
-		class="mandatory">*</span></td>
-	<s:hidden name="schemeId" id="schemeId" />
-	<td class="greybox"><s:textfield value="%{subScheme.scheme.name}"
-			name="subScheme.scheme.name" id="subScheme.scheme.name"
-			autocomplete='off' onFocus="autocompleteSchemeBy20LG();"
-			onBlur="splitSchemeCode(this)" /></td>
-	<td class="greybox"><s:text name="masters.subscheme.search" /><span
-		class="mandatory">*</span></td>
-	<s:hidden name="subSchemeId" id="subSchemeId" />
-	<td class="greybox"><s:textfield value="%{subScheme.name}"
-			name="subScheme.name" id="subScheme.name" autocomplete='off'
-			onFocus="autocompleteSubSchemeBy20LG();"
-			onBlur="splitSubSchemeCode(this);checkuniquenesscode();" /> <egov:uniquecheck
-			id="codeuniquecode" name="codeuniquecode" fieldtoreset="subSchemeId"
-			fields="['Value']" url='masters/loanGrant!codeUniqueCheckCode.action' />
-	</td>
+   
+    <td class="greybox"><s:text name="masters.subscheme.search.scheme" /><span class="mandatory"></span></td>
+    <s:hidden name="schemeId" id="schemeId" />
+    <td class="greybox">
+        <!-- Wrap the input and suggestion box in a container -->
+        <div class="input-container" style="position: relative;">
+            <s:textfield value="%{subScheme.scheme.name}" name="subScheme.scheme.name" id="subScheme.scheme.name"
+                         autocomplete="off" onInput="autocompleteSchemeBy20LG()" onBlur="splitssSchemeCode(this)"
+                         style="width: 70%; padding-right: 20px;" />
+            <!-- Suggestions list appears below the input field -->
+            <div id="suggestions_box" class="suggestions-box" style="display: none; position: absolute; top: 100%; left: 0; width: 70%; background-color: white; border: 1px solid #ccc; box-sizing: border-box; z-index: 9999;" ></div> 
+        </div>
+    </td>
+ 
+    <td class="greybox"><s:text name="masters.subscheme.search" /><span class="mandatory"></span></td>
+<s:hidden name="subSchemeId" id="subSchemeId" />
+
+<td class="greybox">
+    <div class="input-container" style="position: relative;">
+        <s:textfield value="%{subScheme.name}" name="subScheme.name" id="subScheme.name" autocomplete="off" 
+                      onBlur="splitSubSchemeCode(this);checkuniquenesscode();" />
+        
+        <!-- Suggestions box to show the sub-schemes -->
+        <div id="suggestions_box1" class="suggestions-box1" 
+             style="display: none; position: absolute; top: 100%; left: 0; width: 70%; background-color: white; 
+                    border: 1px solid #ccc; box-sizing: border-box; z-index: 9999;">
+        </div> 
+    </div>
+</td>
+
 </tr>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-function loadChanges(obj)
-{
-	//NOTE - In the including jsp, if bankbranch and bankaccount dropdowns are there
-	// then give their ids as  bank_branch and bankaccount respectively.
-	var bankObj= document.getElementById('bank_branch');
-	var bankAccountObj= document.getElementById('bankaccount');
-	if(bankObj!=null)
-	{
-		bankObj.options[0].selected=true;
-		if(obj.options[obj.selectedIndex].value!=-1)
-			populatebank_branch({fundId:obj.options[obj.selectedIndex].value});
-	}
-	if(bankAccountObj!=null)
-		bankAccountObj.options[0].selected=true;
+function loadChanges(obj) {
+    var bankObj = document.getElementById('bank_branch');
+    var bankAccountObj = document.getElementById('bankaccount');
+    if (bankObj != null) {
+        bankObj.options[0].selected = true;
+        if (obj.options[obj.selectedIndex].value != -1)
+            populatebank_branch({fundId: obj.options[obj.selectedIndex].value});
+    }
+    if (bankAccountObj != null)
+        bankAccountObj.options[0].selected = true;
 }
-function autocompleteSchemeBy20LG()
-{
-	     oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common!ajaxLoadSchemeBy20.action", [ "~^"]);
-	    // bootbox.alert("helllpo");
-	   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
-	   oACDS.scriptQueryParam = "startsWith";
-	  
-	   var oAutoComp1 = new YAHOO.widget.AutoComplete('subScheme.scheme.name','codescontainer',oACDS);
-	   oAutoComp1.doBeforeSendQuery = function(sQuery){
-		   loadWaitingImage(); 
-		   return sQuery+"&fundId="+document.getElementById("fundId").value;
-	   } 
-	   oAutoComp1.queryDelay = 0.5;
-	   oAutoComp1.minQueryLength = 3;
-	   oAutoComp1.prehighlightClassName = "yui-ac-prehighlight";
-	   oAutoComp1.useShadow = true;
-	   oAutoComp1.forceSelection = true;
-	   oAutoComp1.maxResultsDisplayed = 20;
-	   oAutoComp1.useIFrame = true;
-	   oAutoComp1.doBeforeExpandContainer = function(oTextbox, oContainer, sQDetauery, aResults) {
-		   clearWaitingImage();
-	           var pos = YAHOO.util.Dom.getXY(oTextbox);
-	           pos[1] += YAHOO.util.Dom.get(oTextbox).offsetHeight + 6;
-	           oContainer.style.width=300;
-	           YAHOO.util.Dom.setXY(oContainer,pos);
-	           return true;
-	   };
 
+function autocompleteSchemeBy20LG() {
+    const input = document.getElementById('subScheme.scheme.name');
+    const suggestionsBox = document.getElementById('suggestions_box');
+    const inputValue = input.value.trim();
 
-	
+    if (inputValue.length === 0) {
+        suggestionsBox.style.display = 'none';
+        input.style.height = 'auto'; 
+        return;
+    }
+
+  
+    input.style.height = 'auto';
+    input.style.height = input.scrollHeight + 'px'; 
+
+    // Prepare the query parameters for the AJAX request
+    const startsWith = inputValue;
+    const fundId = document.getElementById('fundId').value;
+
+    $.ajax({
+        url: '/services/EGF/voucher/common-ajaxLoadSchemeBy20.action',
+        type: 'GET',
+        data: {
+            startsWith: startsWith, 
+            fundId: fundId         
+        },
+        dataType: 'html',
+        success: function(response) {
+           
+            const schemes = response.trim().split("\n"); 
+
+            suggestionsBox.innerHTML = '';
+
+            if (schemes.length > 0) {
+                suggestionsBox.style.display = 'block'; 
+                schemes.forEach(function(scheme) {
+                    const div = document.createElement('div');
+                    div.classList.add('suggestion-item');
+
+                    const [schemeName, schemeId] = scheme.split(":");
+                   
+                    div.textContent = schemeName;
+                    div.onclick = function() {
+                        selectScheme(schemeName, schemeId); 
+                    };
+
+                    suggestionsBox.appendChild(div);
+                });
+            } else {
+                suggestionsBox.style.display = 'none';
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching schemes:', error);
+        }
+    });
 }
-function autocompleteSubSchemeBy20LG()
-{
-	   oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common!ajaxLoadSubSchemeBy20.action", [ "~^"]);
-	   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
-	   oACDS.scriptQueryParam = "startsWith";
-	   var oAutoComp1 = new YAHOO.widget.AutoComplete('subScheme.name','codescontainer',oACDS);
-	   oAutoComp1.doBeforeSendQuery = function(sQuery){
-		   loadWaitingImage(); 
-		   return sQuery+"&schemeId="+document.getElementById("schemeId").value;
-	   } 
-	   oAutoComp1.queryDelay = 0.5;
-	   oAutoComp1.minQueryLength = 3;
-	   oAutoComp1.prehighlightClassName = "yui-ac-prehighlight";
-	   oAutoComp1.useShadow = true;
-	   oAutoComp1.forceSelection = true;
-	   oAutoComp1.maxResultsDisplayed = 20;
-	   oAutoComp1.useIFrame = true;
-	   oAutoComp1.doBeforeExpandContainer = function(oTextbox, oContainer, sQDetauery, aResults) {
-		   clearWaitingImage();
-	           var pos = YAHOO.util.Dom.getXY(oTextbox);
-	           pos[1] += YAHOO.util.Dom.get(oTextbox).offsetHeight + 6;
-	           oContainer.style.width=300;
-	           YAHOO.util.Dom.setXY(oContainer,pos);
-	           return true;
-	   };
 
 
-	
+function selectScheme(schemeName, schemeId) {
+    const input = document.getElementById('subScheme.scheme.name');
+    const schemeIdField = document.getElementById('schemeId');
+    const suggestionsBox = document.getElementById('suggestions_box');
+
+    input.value = schemeName;
+    schemeIdField.value = schemeId;
+    
+    suggestionsBox.style.display = 'none';
+     
+     autocompleteSubSchemeBy20LG(schemeId);
+    
 }
+
+
+
+function autocompleteSubSchemeBy20LG(schemeId) {
+  
+    $.ajax({
+        url: '/services/EGF/voucher/common-ajaxLoadSubSchemeBy20.action', 
+        type: 'GET',
+        data: { schemeId: schemeId }, 
+        dataType: 'json',
+        success: function(response) {
+            
+            const suggestionsBox1 = document.getElementById('suggestions_box1');
+            suggestionsBox1.innerHTML = ''; 
+
+           
+            if (response && response.length > 0) {
+                suggestionsBox1.style.display = 'block'; 
+
+               
+                response.forEach(function(subScheme) {
+                    const div = document.createElement('div');
+                    div.classList.add('suggestion-item');
+                    div.textContent = subScheme.name; 
+                    div.setAttribute('data-id', subScheme.id); 
+                 
+                    div.onclick = function() {
+                        selectSubScheme(subScheme.id, subScheme.name);
+                    };
+
+                    suggestionsBox1.appendChild(div); 
+                });
+            } else {
+                suggestionsBox1.style.display = 'none';
+                alert('No sub-schemes found for this scheme.');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching sub-schemes:', error);
+            alert('Error fetching sub-schemes. Please try again later.');
+        }
+    });
+}
+
+function selectSubScheme(id, name) {
+    const inputField = document.getElementById('subScheme.name');
+    const hiddenSubSchemeIdField = document.getElementById('subSchemeId');
+    inputField.value = name;
+    hiddenSubSchemeIdField.value = id; 
+
+   
+    document.getElementById('suggestions_box1').style.display = 'none';
+}
+
 </script>
+
