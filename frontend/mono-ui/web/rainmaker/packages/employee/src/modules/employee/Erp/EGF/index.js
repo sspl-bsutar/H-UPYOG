@@ -23,14 +23,14 @@ class EGFFinance extends Component {
     winheight = window.innerHeight - 100,
     erp_url,
     tenantId = getTenantId();
-    //Reading domain name from the request url
-    domainurl = hostname.substring(hostname.indexOf(".") + 1);
-    // Reading environment name (ex: dev, qa, uat, fin-uat etc) from the globalconfigs if exists else reading from the .env file
-    finEnv = this.globalConfigExists() ? window.globalConfigs.getConfig("FIN_ENV") : process.env.REACT_APP_FIN_ENV;
-    // Preparing finance subdomain url using the above environment name and the domain url
-    subdomainurl = !!(finEnv) ? "-" + finEnv + "." + domainurl : "." + domainurl;
-    erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + subdomainurl + menuUrl;
-
+     //Reading domain name from the request url
+     domainurl = hostname.substring(hostname.indexOf(".") + 1);
+     // Reading environment name (ex: dev, qa, uat, fin-uat etc) from the globalconfigs if exists else reading from the .env file
+     finEnv = this.globalConfigExists() ? window.globalConfigs.getConfig("FIN_ENV") : process.env.REACT_APP_FIN_ENV;
+     // Preparing finance subdomain url using the above environment name and the domain url
+     subdomainurl = !!(finEnv) ? "-" + finEnv + "." + domainurl : "." + domainurl;
+     erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + subdomainurl + menuUrl;
+ 
     return (
       <div>
         <iframe name="erp_iframe" id="erp_iframe" height={winheight} width="100%" />
